@@ -51,7 +51,7 @@ FeCtx *fectx_deserialize(char const *s) {
 	    s++;
 	}
     }
-    sscanf(s, "%u", &ctx.seed);
+    ctx.seed = xstrdup(s);
 
     msg(&ctx, "Context deserialized\n");
 

@@ -3,9 +3,12 @@ T = $(patsubst %.c, %.t, $(C))
 
 foo: $(T)
 	@for t in *.t ; do \
+	  echo; \
 	  echo "Running test: $$t ... "; \
 	  $$t; \
-	done
+	done; \
+	echo; \
+	echo "All tests completed successfully."
 
 %.t: %.c
 	$(CC) -Wall -Werror -o $@ $< -l$(FE)

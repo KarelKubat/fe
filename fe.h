@@ -40,7 +40,7 @@ typedef struct {
     int ntargets;
     Target *targets;
     /* Random generator related */
-    uint32_t seed;
+    char *seed;
 } FeCtx;
 
 /* Local functions */

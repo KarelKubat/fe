@@ -29,9 +29,7 @@ char *fectx_serialize(FeCtx const *ctx) {
     }
 
     /* Random generator seed */
-    asprintf(&cp, "%u", (unsigned)ctx->seed);
-    ret = xstrcat(ret, cp);
-    free(cp);
+    ret = xstrcat(ret, ctx->seed);
 
     /* Done */
     return ret;
