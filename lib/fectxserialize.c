@@ -1,6 +1,6 @@
 #include "../fe.h"
 
-char *target_serialize(FeCtx const *ctx) {
+char *fectx_serialize(FeCtx const *ctx) {
     char *ret = 0, *cp;
     int i;
 

@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 	    target_add(&ctx, argv[i]);
 
     /* Set FE environment */
-    cp = target_serialize(&ctx);
+    cp = fectx_serialize(&ctx);
     msg(&ctx, "Serialized context: %s\n", cp);
     setenv("FE_CTX", cp, 1);
 

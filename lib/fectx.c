@@ -7,7 +7,7 @@ FeCtx *fectx() {
 	char *env = getenv("FE_CTX");
 	if (!env)
 	    error("Internal environment variable FE_CTX missing\n");
-	ctx = target_deserialize(env);
+	ctx = fectx_deserialize(env);
     }
     return ctx;
 }

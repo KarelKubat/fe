@@ -1,6 +1,6 @@
 #include "../fe.h"
 
-FeCtx *target_deserialize(char const *s) {
+FeCtx *fectx_deserialize(char const *s) {
     static FeCtx ctx;
     static int deserialized = 0;    
     int i;
