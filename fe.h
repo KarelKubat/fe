@@ -4,6 +4,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <pwd.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -54,7 +55,6 @@ extern void msg(FeCtx const *ctx, char const *fmt, ...)
     __attribute__((format(printf, 2, 3)));
 extern char randbyte(FeCtx *ctx, uint32_t x);
 extern void randinit(FeCtx *ctx, char const *s);
-extern char *readkey(void);
 extern void target_add(FeCtx *ctx, char const *name);
 extern FeCtx *target_deserialize(char const *s);
 extern void targets_msg(FeCtx *ctx);

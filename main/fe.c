@@ -5,9 +5,8 @@ FeCtx ctx;
 static void usage(void);
 
 int main(int argc, char **argv) {
-    int opt, key_initialized = 0, target_set = 0, i;
-    char *file_to_crypt = 0;
-    char buffer[1024], *cp;
+    int opt, target_set = 0, i;
+    char *file_to_crypt = 0, buffer[1024], *cp, *key;
 
     /* Catchall usage info */
     if (argc == 1)
@@ -20,9 +19,7 @@ int main(int argc, char **argv) {
 	case '?':
 	    usage();
 	case 'k':
-	    randinit(&ctx, optarg);
-	    msg(&ctx, "Cryptokey obtained from command line.\n");
-	    key_initialized = 1;
+	    key = optarg;
 	    break;
 	case 'f':
 	    file_to_crypt = optarg;
@@ -40,16 +37,11 @@ int main(int argc, char **argv) {
 	}
 
     /* Get the crypto key unless given already */
-    if (! key_initialized) {
-	char *key = getenv("FE_KEY");
-	if (!key) {
-	    randinit(&ctx, readkey());
-	    msg(&ctx, "Cryptokey read from stdin.\n");
-	} else {
-	    randinit(&ctx, key);
-	    msg(&ctx, "Cryptokey obtained from environment.\n");
-	}
-    }
+    if (! key)
+	key = getenv("FE_KEY");
+    if (! key)
+	key = getpass("fe key: ");
+    randinit(&ctx, key);
 
     /* Find targets, if not done so yet via flags -t */
     if (! target_set)
