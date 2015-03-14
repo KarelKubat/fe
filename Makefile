@@ -1,22 +1,28 @@
 BINDIR = /usr/local/bin
 LIBDIR = /usr/local/lib
+FE     = fe
+LIB    = lib$(FE).dylib
+VER    = 1.00
+
+# Versioning:
+# [KK 2015-03-13] 1.00, initial
 
 foo:
-	make -C lib
-	make -C main
+	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
+	  make -C lib
+	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
+	  make -C main
 
-install: foo
-	LIBDIR=$(LIBDIR) make -C lib  install
-	BINDIR=$(BINDIR) make -C main install
+test: install
+	LIB=$(LIB) FE=$(FE) make -C test
 
-bash: foo
-	@export DYLD_LIBRARY_PATH=lib; \
-	 export FE_KEY=bla; \
-	 echo "Starting bash with new library path and FE_KEY 'bla'"; \
-	 echo "Hit ^D to stop."; \
-	 /bin/bash; \
-	 echo "Back in make environment."
+install:
+	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
+	  make -C lib  install
+	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
+	  make -C main install
 
 clean:
-	make -C lib clean
-	make -C main clean
+	LIB=$(LIB) FE=$(FE) make -C lib clean
+	LIB=$(LIB) FE=$(FE) make -C main clean
+	LIB=$(LIB) FE=$(FE) make -C test clean

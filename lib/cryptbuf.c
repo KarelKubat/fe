@@ -3,7 +3,7 @@
 void cryptbuf(char *buf, size_t bufsz, size_t offset) {
     size_t i;
 
-    msg(fectx(), "Transcrypting buffer of %ul bytes (offset %ul)\n",
+    msg(fectx(), "Transcrypting buffer of %lu bytes (offset %lu)\n",
 	bufsz, offset);
     
     for (i = 0; i < bufsz; i++) {

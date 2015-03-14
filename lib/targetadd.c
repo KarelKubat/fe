@@ -9,6 +9,7 @@ void target_add(FeCtx *ctx, char const *t) {
 	ctx->targets[ctx->ntargets].name = xstrdup(t);
 	ctx->targets[ctx->ntargets].st_dev = statbuf.st_dev;
 	ctx->targets[ctx->ntargets].st_ino = statbuf.st_ino;
+	ctx->targets[ctx->ntargets].fd = -1;
 	ctx->ntargets++;
     }
 }

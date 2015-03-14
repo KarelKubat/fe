@@ -1,10 +1,3 @@
-/*
- * Main fe program
- */
-
-/* [KK 2015-03-06] Initial version */
-#define VER "1.00"
-
 #include "../fe.h"
 
 FeCtx ctx;
@@ -27,14 +20,8 @@ int main(int argc, char **argv) {
 	case '?':
 	    usage();
 	case 'k':
-	    if (!strcmp(optarg, "-")) {
-		randinit(&ctx, readkey());
-		msg(&ctx, "Cryptokey read from stdin.\n");
-	    }
-	    else {
-		randinit(&ctx, optarg);
-		msg(&ctx, "Cryptokey obtained from command line.\n");
-	    }
+	    randinit(&ctx, optarg);
+	    msg(&ctx, "Cryptokey obtained from command line.\n");
 	    key_initialized = 1;
 	    break;
 	case 'f':
@@ -55,12 +42,13 @@ int main(int argc, char **argv) {
     /* Get the crypto key unless given already */
     if (! key_initialized) {
 	char *key = getenv("FE_KEY");
-	if (!key)
-	    error("Neither an environment variable FE_KEY is set, "
-		  "nor flag -k used to initialize crypto, try 'fe -h' "
-		  "for an overview\n");
-	randinit(&ctx, key);
-	msg(&ctx, "Cryptokey obtained from environment.\n");
+	if (!key) {
+	    randinit(&ctx, readkey());
+	    msg(&ctx, "Cryptokey read from stdin.\n");
+	} else {
+	    randinit(&ctx, key);
+	    msg(&ctx, "Cryptokey obtained from environment.\n");
+	}
     }
 
     /* Find targets, if not done so yet via flags -t */
@@ -83,7 +71,7 @@ int main(int argc, char **argv) {
 	/* Going to launch the .so. Set targets if not yet done. */
 	targets_msg(&ctx);
 
-	setenv("DYLD_INSERT_LIBRARIES", "/usr/local/lib/libfe.dylib", 1);
+	setenv("DYLD_INSERT_LIBRARIES", LIBDIR "/" LIB, 1);
 	setenv("DYLD_FORCE_FLAT_NAMESPACE", "1", 1);
 
 	/* Run the intended command */
@@ -116,7 +104,8 @@ static void usage(void) {
 "  -h, -?    This help\n"
 "  -k KEY    Initializes the crypto functions with the stated key. When this\n"
 "            flag is absent, the FE_KEY environment variable is used. When\n"
-"            key is one hypen (as in -k-) then the key is read from stdin.\n"
+"            neither -k is given nor FE_KEY is present, the key is read from\n"
+"            stdin.\n"
 "  -t FILE   Marks the file as transcryption target in a following command.\n"
 "            Default is to transcrypt all files within the arguments. Flag is\n"
 "            repeatable to specify more targets.\n"

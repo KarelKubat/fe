@@ -5,7 +5,7 @@ void target_update_fd(char const *f, int fd) {
     int i;
 
     /* Don't store bad fd's or non-existing files*/
-    if (fd < 0) {
+    if (fd < 3) {
 	msg(fectx(), "Candidate fd %d: invalid fd, not a target\n", fd);
 	return;
     }
