@@ -16,5 +16,9 @@ $(LIB): $(O)
 	      -DMAGIC=\"$(MAGIC)\" -DLIBDIR=\"$(LIBDIR)\" \
 	      -DBINDIR=\"$(BINDIR)\" $(OPTFLAG) $<
 
+seedserialize.o: seedserialize.c magic.h
+magic.h: ../Makefile.local
+	echo \"$(MAGIC)\" | perl magic.pl > magic.h
+
 clean:
-	rm -f $(O) $(LIB)
+	rm -f $(O) $(LIB) magic.h

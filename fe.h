@@ -41,6 +41,11 @@ typedef struct {
     char *seed;
 } FeCtx;
 
+/* Check that MAGIC is defined, which should be kept in Makefile.local */
+#ifndef MAGIC
+#error "You need to define a MAGIC string for the build. RTFM please."
+#endif
+
 /* Local functions */
 extern void cryptbuf(char *buf, size_t bufsz, size_t offset);
 extern void cryptfile(char const *f);

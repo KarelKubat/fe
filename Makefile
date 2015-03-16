@@ -4,6 +4,7 @@ FE      = fe
 LIB     = lib$(FE).dylib
 VER     = 1.00
 OPTFLAG = -O2
+TAR     = /tmp/fe-$(VER).tar.gz
 
 # Versioning:
 # [KK 2015-03-13] 1.00, initial
@@ -29,3 +30,8 @@ clean:
 	LIB=$(LIB) FE=$(FE) make -C lib clean
 	LIB=$(LIB) FE=$(FE) make -C main clean
 	LIB=$(LIB) FE=$(FE) make -C test clean
+
+dist: clean
+	(cd ..; \
+         tar -c -z --exclude fe/Makefile.local \
+	     --exclude fe/.git --exclude fe/.gitignore -f $(TAR) fe/)

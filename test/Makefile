@@ -11,7 +11,7 @@ foo: $(T)
 	echo "All tests completed successfully."
 
 %.t: %.c
-	$(CC) -Wall -Werror -o $@ $< -l$(FE)
+	$(CC) -Wall -Werror -DMAGIC=\"dontcare\" -o $@ $< -l$(FE)
 
 clean:
 	rm -f $(T)

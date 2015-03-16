@@ -7,7 +7,6 @@ ssize_t read(int fd, void *buf, size_t bytes) {
 
     if (! real_read)
 	real_read = dllookup("read");
-
     if (! is_fd_target(fd))
 	return real_read(fd, buf, bytes);
 

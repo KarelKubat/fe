@@ -1,5 +1,5 @@
 lib/*.o
 lib/libfe.dylib
+lib/magic.h
 main/fe
 test/*.t
-Makefile.local
