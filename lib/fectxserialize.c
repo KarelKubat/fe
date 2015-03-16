@@ -16,20 +16,17 @@ char *fectx_serialize(FeCtx const *ctx) {
 	ret = xstrcat(ret, "e");
 
     /* File targets */
-    asprintf(&cp, "%d:", ctx->ntargets);
+    xasprintf(&cp, "%d:", ctx->ntargets);
     ret = xstrcat(ret, cp);
     free(cp);
     
     for (i = 0; i < ctx->ntargets; i++) {
-	asprintf(&cp, "%s:%d:%llu:",
-		 ctx->targets[i].name, ctx->targets[i].st_dev,
-		 ctx->targets[i].st_ino);
-	ret = xstrcat(ret, cp);
-	free(cp);
+	ret = xstrcat(ret, ctx->targets[i].name);
+	ret = xstrcat(ret, ":");
     }
 
     /* Random generator seed */
-    ret = xstrcat(ret, ctx->seed);
+    ret = xstrcat(ret, seed_serialize(ctx->seed));
 
     /* Done */
     return ret;

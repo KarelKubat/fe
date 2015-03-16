@@ -2,3 +2,4 @@ lib/*.o
 lib/libfe.dylib
 main/fe
 test/*.t
+Makefile.local

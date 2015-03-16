@@ -1,12 +1,12 @@
 #include "../fe.h"
 
-FeCtx ctx;
 
 static void usage(void);
 
 int main(int argc, char **argv) {
     int opt, target_set = 0, i;
     char *file_to_crypt = 0, buffer[1024], *cp, *key;
+    static FeCtx ctx;
 
     /* Catchall usage info */
     if (argc == 1)
@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
     if (! target_set)
 	for (i = optind + 1; i < argc; i++)
 	    target_add(&ctx, argv[i]);
+    targets_msg(&ctx);
 
     /* Set FE environment */
     cp = fectx_serialize(&ctx);
@@ -60,9 +61,7 @@ int main(int argc, char **argv) {
     } else if (optind == argc) {
 	error("No action taken, try 'fe -h' for an overview\n");
     } else {
-	/* Going to launch the .so. Set targets if not yet done. */
-	targets_msg(&ctx);
-
+	/* Going to launch the command with the shared object underneath */
 	setenv("DYLD_INSERT_LIBRARIES", LIBDIR "/" LIB, 1);
 	setenv("DYLD_FORCE_FLAT_NAMESPACE", "1", 1);
 

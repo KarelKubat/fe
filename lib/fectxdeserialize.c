@@ -41,19 +41,9 @@ FeCtx *fectx_deserialize(char const *s) {
 		s++;
 	    }
 	    s++;
-	    sscanf(s, "%d:%llu",
-		   &ctx.targets[i].st_dev, &ctx.targets[i].st_ino);
-	    while (isdigit(*s))
-		s++;
-	    s++;
-	    while (isdigit(*s))
-		s++;
-	    s++;
 	}
     }
-    ctx.seed = xstrdup(s);
-
-    msg(&ctx, "Context deserialized\n");
+    ctx.seed = xstrdup(seed_deserialize(s));
 
     return &ctx;
 }

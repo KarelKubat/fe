@@ -1,5 +1,5 @@
 fe: fe.c ../lib/$(LIB)
-	$(CC) -O2 -DLIB=\"$(LIB)\" -DVER=\"$(VER)\" -Wall -Werror \
+	$(CC) $(OPTFLAG) -DLIB=\"$(LIB)\" -DVER=\"$(VER)\" -Wall -Werror \
               -DLIBDIR=\"$(LIBDIR)\" -DBINDIR=\"$(BINDIR)\" \
 	      -o fe fe.c -L../lib -l$(FE)
 

@@ -27,8 +27,6 @@ typedef enum {
 /* File target definition */
 typedef struct {
     char *name;
-    dev_t st_dev;
-    ino_t st_ino;
     int fd;
 } Target;
 
@@ -56,12 +54,17 @@ extern int isfile(struct stat const *st);
 extern void msg(FeCtx const *ctx, char const *fmt, ...)
     __attribute__((format(printf, 2, 3)));
 extern char randbyte(FeCtx *ctx, uint32_t x);
+extern char randbyte_keyed(char const *key, uint32_t x);
 extern void randinit(FeCtx *ctx, char const *s);
+extern char *seed_deserialize(char const *buf);
+extern char *seed_serialize(char const *buf);
 extern void target_add(FeCtx *ctx, char const *name);
 extern void targets_msg(FeCtx *ctx);
 extern void target_update_fd(char const *name, int fd);
+extern int xasprintf(char **ret, const char *fmt, ...);
 extern void *xmalloc(size_t sz);
 extern void *xrealloc(void *mem, size_t newsz);
+extern char *xrealpath(char const *path);
 extern char *xstrcat(char *mem, char const *s);
 extern char *xstrdup(char const *s);
 

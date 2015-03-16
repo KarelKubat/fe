@@ -5,7 +5,7 @@ foo: $(T)
 	@for t in *.t ; do \
 	  echo; \
 	  echo "Running test: $$t ... "; \
-	  $$t; \
+	  $$t || exit 1; \
 	done; \
 	echo; \
 	echo "All tests completed successfully."

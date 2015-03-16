@@ -9,11 +9,12 @@ $(LIBDIR)/$(LIB): $(LIB)
 	install $(LIB) $(LIBDIR)
 
 $(LIB): $(O)
-	$(CC) -g -dynamiclib -Wl,-single_module -o $(LIB) $(O)
+	$(CC) $(OPTFLAG) -dynamiclib -Wl,-single_module -o $(LIB) $(O)
 
 %.o: %.c
-	$(CC) -Wall -Werror -O2 -c -fPIC -DVER=\"$(VER)\" -DLIB=\"$(LIB)\" \
-	      -DLIBDIR=\"$(LIBDIR)\" -DBINDIR=\"$(BINDIR)\" $<
+	$(CC) -Wall -Werror -c -fPIC -DVER=\"$(VER)\" -DLIB=\"$(LIB)\" \
+	      -DMAGIC=\"$(MAGIC)\" -DLIBDIR=\"$(LIBDIR)\" \
+	      -DBINDIR=\"$(BINDIR)\" $(OPTFLAG) $<
 
 clean:
 	rm -f $(O) $(LIB)
