@@ -1,0 +1,24 @@
+Installation Instructions for the Fast and the Furious
+------------------------------------------------------
+
+
+1. Create Makefile.local
+
+Create a file Makefile.local. In this file you must configure a built-in "magic" string that will be used to encrypt internal data structures. For example:
+
+    # Makefile.local 
+    MAGIC = This is my builtin secret passphrase
+
+Choose a good passphrase. E.g., visit https://www.grc.com/passwords.htm and copy one of the passphrases that are uniquely generated on that page for each visitor. Or let your favorite broswer plugin such as LastPass generate one.
+
+Back up this Makefile.local to a 
+
+
+2. Type "make"
+
+This will make a local build.
+
+
+3. Installation
+
+Type "make install". You might want to do this as user root (e.g., via "sudo"), because the installation target directories are /usr/local/lib and /usr/local/bin.

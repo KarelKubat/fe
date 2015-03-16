@@ -1,0 +1,55 @@
+First Tests
+-----------
+
+
+1. Installation
+
+First of all, make sure that fe is fully installed. A local build won't do.
+See INSTALL.txt for instructions.
+
+Some of the steps below prompt for a user secret. If you don't want that, you
+can
+    export FE_KEY=MySecret
+to disable prompting. This is useful for testing, but as the secret key is now
+in the environment table, this is not suggested for real-life applications.
+
+
+2. Encrypting a plain text file
+
+Create a plaintext file, e.g.:
+    echo 'Hello World' > /tmp/hello.txt
+
+Encrypt it:
+    fe -f /tmp/hello.txt          # fe will prompt for a user secret
+    od -c /tmp/hello.txt          # will just show gibberish
+
+Test reading it back:
+    fe cat /tmp/hello.txt         # enter the same secret as above,
+                                  # will show plain text
+
+
+3. Encrypting on the fly
+
+This step won't ever create a plaintext file:
+    fe vi /tmp/secret.txt         # fe will prompt for a user secret
+                                  # then in vi enter some plain text
+			          # (use emacs, or pico if you want)
+    od -c /tmp/secret.txt         # will just show gibberish			   
+    fe cat /tmp/secret.txt        # enter the same secret above,
+       	   		          # will show plain text
+
+
+4. Testing a transcrypting environement
+
+This step starts an entire shell with a transcrypt-target.
+    fe -t /tmp/another.txt bash   # starts a fresh bash with named file
+       	  		   	  # as target
+    cat /tmp/another.txt          # No such file or directory
+    vi /tmp/another.txt           # put some plain text in there
+
+Optionally, in another terminal:
+    od -c /tmp/another.txt        # will just show gibberish
+
+In the transcrypting environment:
+    cat /tmp/another.txt          # shows the plain text
+    exit			  # stops the bash process
