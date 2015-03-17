@@ -13,7 +13,7 @@ int main() {
 
     randinit(&ctx, "user secret");
     target_add(&ctx, fname);
-    ctx.msg_verbosity = 1;
+    /* ctx.msg_verbosity = 1; */
     setenv("FE_CTX", fectx_serialize(&ctx), 1);
 
     if ( (fd = open(fname, O_CREAT | O_WRONLY, 0644)) < 0 )

@@ -2,7 +2,7 @@
 
 void cryptfile(char const *f) {
     int fd;
-    char buf[512];
+    char buf[51200];
     size_t offset;
 
     if ( (fd = open(f, O_RDWR)) < 0 )
