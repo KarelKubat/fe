@@ -16,6 +16,9 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 
+/* Local includes */
+#include "lib/SHA3api_ref.h"
+
 /* Runtime context definition */
 
 /* Verbosity estination: stderr or syslog? */
@@ -46,8 +49,13 @@ typedef struct {
 #error "You need to define a MAGIC string for the build. RTFM please."
 #endif
 
+/* Hashing-related */
+#define HASH_BIT_SIZE   1024
+#define HASH_BYTE_SIZE  (HASH_BIT_SIZE / 8)
+
 /* Local functions */
-extern void cryptbuf(char *buf, size_t bufsz, size_t offset);
+extern void cryptbuf(char *buf, size_t bufsz, size_t offset,
+		     BitSequence *hashval);
 extern void cryptfile(char const *f);
 extern void *dllookup(char const *name);
 extern void error(char const *fmt, ...) __attribute__((format(printf, 1, 2)));
@@ -58,8 +66,8 @@ extern int is_fd_target(int fd);
 extern int isfile(struct stat const *st);
 extern void msg(FeCtx const *ctx, char const *fmt, ...)
     __attribute__((format(printf, 2, 3)));
-extern char randbyte(FeCtx *ctx, uint32_t x);
-extern char randbyte_keyed(char const *key, uint32_t x);
+extern char randbyte(FeCtx *ctx, uint32_t x, BitSequence *hashval);
+extern char randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval);
 extern void randinit(FeCtx *ctx, char const *s);
 extern char *seed_deserialize(char const *buf);
 extern char *seed_serialize(char const *buf);

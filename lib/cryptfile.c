@@ -2,12 +2,18 @@
 
 void cryptfile(char const *f) {
     int fd;
-    char buf[51200];
+    char buf[102400];
     size_t offset;
+    BitSequence hashval[HASH_BYTE_SIZE];
 
+    /* Open or croak */
     if ( (fd = open(f, O_RDWR)) < 0 )
 	error("Cannot open file %s: %s\n", f, strerror(errno));
 
+    /* Make sure transcryptor rehashes */
+    *hashval = 0;
+
+    /* Fetch blocks, transcrypt, write back */
     while (1) {
 	ssize_t nread, nwritten;
 
@@ -22,7 +28,7 @@ void cryptfile(char const *f) {
 	    error("Read error on file %s: %s\n", f, strerror(errno));
 
 	/* Encrypt */
-	cryptbuf(buf, nread, offset);
+	cryptbuf(buf, nread, offset, hashval);
 
 	/* Rewind to previous offset */
 	if (lseek(fd, offset, SEEK_SET) < 0)

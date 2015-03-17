@@ -5,6 +5,7 @@ ssize_t pwrite(int fd, const void *buf, size_t bytes, off_t offset) {
 				  off_t offset);
     ssize_t ret;
     void *crypted_buf;
+    BitSequence hashval[HASH_BYTE_SIZE];
 
     if (! real_pwrite)
 	real_pwrite = dllookup("pwrite");
@@ -16,8 +17,9 @@ ssize_t pwrite(int fd, const void *buf, size_t bytes, off_t offset) {
     crypted_buf = xmalloc(bytes);
     memcpy(crypted_buf, buf, bytes);
 
-    /* Encrypt our copy and write it */
-    cryptbuf(crypted_buf, bytes, offset);
+    /* Encrypt our copy and write it. Make sure transcryption rehashes. */
+    *hashval = 0;
+    cryptbuf(crypted_buf, bytes, offset, hashval);
     ret = real_pwrite(fd, crypted_buf, bytes, offset);
 
     /* Cleanup */

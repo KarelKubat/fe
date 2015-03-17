@@ -5,6 +5,7 @@ ssize_t write(int fd, const void *buf, size_t bytes) {
     ssize_t ret;
     off_t startoff;
     void *crypted_buf;
+    BitSequence hashval[HASH_BYTE_SIZE];
 
     if (! real_write)
 	real_write = dllookup("write");
@@ -16,9 +17,10 @@ ssize_t write(int fd, const void *buf, size_t bytes) {
     crypted_buf = xmalloc(bytes);
     memcpy(crypted_buf, buf, bytes);
 
-    /* Encrypt our copy and write it */
+    /* Encrypt our copy and write it. Make sure transcryption rehashes. */
     startoff = lseek(fd, 0, SEEK_CUR);
-    cryptbuf(crypted_buf, bytes, startoff);
+    *hashval = 0;
+    cryptbuf(crypted_buf, bytes, startoff, hashval);
     ret = real_write(fd, crypted_buf, bytes);
 
     /* Cleanup */

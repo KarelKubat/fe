@@ -18,7 +18,7 @@ $(LIB): $(O)
 
 seedserialize.o: seedserialize.c magic.h
 magic.h: ../Makefile.local
-	echo \"$(MAGIC)\" | perl magic.pl > magic.h
+	echo "$(MAGIC)" | perl magic.pl > magic.h
 
 clean:
 	rm -f $(O) $(LIB) magic.h
