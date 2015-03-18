@@ -17,7 +17,8 @@ foo: $(T)
 
 %.t: %.c
 	$(CC) -Wall -Werror -DMAGIC=\"dontcare\" -o $@ $< \
-	      -L../main -llocal -l$(FE)
+	      -L../main -llocal -l$(FE) \
+	      $(shell ../etc/c-conf -c ../c-conf.cache lib dl)
 
 clean:
 	rm -f $(T)

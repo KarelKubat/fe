@@ -4,7 +4,8 @@ AR    = local
 LIBAR = liblocal.a
 
 fe: $(LIBAR) ../lib/$(LIB)
-	$(CC) -o fe -L. -l$(AR) -L../lib -l$(FE)
+	$(CC) -o fe -L. -l$(AR) -L../lib -l$(FE) \
+	      $(shell ../etc/c-conf -c ../c-conf.cache lib dl)
 
 $(LIBAR): $(O)
 	ar rvs $(LIBAR) $(O)

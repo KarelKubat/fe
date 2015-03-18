@@ -33,6 +33,11 @@ Type "make install". You might want to do this as user root (e.g., via
 "sudo"), because the installation target directories are
 /usr/local/lib and /usr/local/bin.
 
+On Linux, type (as user "root"):
+    ldconfig
+This will update the table of the dynamic linker, so that
+/usr/local/lib/libfe.so will be found at next invocations of fe.
+
 
 4. Sanity checking
 

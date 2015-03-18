@@ -11,7 +11,7 @@ $(LIBDIR)/$(LIB): $(LIB)
 $(LIB): $(O)
 	$(CC) $(OPTFLAG) \
 	      $(shell ../etc/c-conf -c ../c-conf.cache so-lflags) \
-	      -o $(LIB) $(O)
+	      -o $(LIB) $(O) $(shell ../etc/c-conf -c ../c-conf.cache lib dl)
 
 %.o: %.c
 	$(CC) -Wall -Werror -c \
@@ -19,6 +19,9 @@ $(LIB): $(O)
 	      -DVER=\"$(VER)\" -DLIB=\"$(LIB)\" \
 	      -DMAGIC=\"$(MAGIC)\" -DLIBDIR=\"$(LIBDIR)\" \
 	      -DBINDIR=\"$(BINDIR)\" $(OPTFLAG) $<
+
+skein.o: skein.c
+	$(CC) -c $<
 
 feseedserialize.o: feseedserialize.c magic.h
 magic.h: ../Makefile.local

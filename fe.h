@@ -1,9 +1,12 @@
 
 /* Generic includes */
+#define __USE_GNU
+#define _GNU_SOURCE
 #include <ctype.h>
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <libio.h>
 #include <pwd.h>
 #include <stdarg.h>
 #include <stdint.h>

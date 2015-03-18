@@ -36,7 +36,7 @@ int main() {
     }
     readv(fd, dst, 3);
     for (i = 0; i < 3; i++) 
-	printf("Read back block %d: %s", i, dst[i].iov_base);
+	printf("Read back block %d: %s", i, (char*) dst[i].iov_base);
     close(fd);
     
     return 0;

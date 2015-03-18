@@ -6,6 +6,7 @@ int main() {
     BitSequence hashval[HASH_BYTE_SIZE];
 
     ctx.seed = "secret";
+    ctx.msg_verbosity = 1;
     
     for (i = 0; i <= 10000; i++)
 	s[i] = fe_randbyte(&ctx, i, hashval);

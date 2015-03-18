@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
     int opt, target_set = 0, i;
-    char *file_to_crypt = 0, buffer[1024], *cp, *key;
+    char *file_to_crypt = 0, buffer[1024], *cp, *key = 0;
     static FeCtx ctx;
 
     /* Catchall usage info */
@@ -59,8 +59,11 @@ int main(int argc, char **argv) {
 	fe_error("No action taken, try 'fe -h' for an overview\n");
     } else {
 	/* Going to launch the command with the shared object underneath */
+	/* For MacOSX: */
 	setenv("DYLD_INSERT_LIBRARIES", LIBDIR "/" LIB, 1);
 	setenv("DYLD_FORCE_FLAT_NAMESPACE", "1", 1);
+	/* For Linux: */
+	setenv("LD_PRELOAD", LIBDIR "/" LIB, 1);
 
 	/* Run the intended command */
 	buffer[0] = 0;
