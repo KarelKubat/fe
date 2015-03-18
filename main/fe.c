@@ -1,8 +1,5 @@
 #include "../fe.h"
 
-
-static void usage(void);
-
 int main(int argc, char **argv) {
     int opt, target_set = 0, i;
     char *file_to_crypt = 0, buffer[1024], *cp, *key;
@@ -51,15 +48,15 @@ int main(int argc, char **argv) {
 
     /* Set FE environment */
     cp = fectx_serialize(&ctx);
-    msg(&ctx, "Serialized context: %s\n", cp);
+    fe_msg(&ctx, "Serialized context: %s\n", cp);
     setenv("FE_CTX", cp, 1);
 
     if (file_to_crypt) {
 	if (optind != argc)
-	    error("No command and arguments accepted with flag -f\n");
+	    fe_error("No command and arguments accepted with flag -f\n");
 	cryptfile(file_to_crypt);
     } else if (optind == argc) {
-	error("No action taken, try 'fe -h' for an overview\n");
+	fe_error("No action taken, try 'fe -h' for an overview\n");
     } else {
 	/* Going to launch the command with the shared object underneath */
 	setenv("DYLD_INSERT_LIBRARIES", LIBDIR "/" LIB, 1);
@@ -69,43 +66,16 @@ int main(int argc, char **argv) {
 	buffer[0] = 0;
 	for (i = optind; i < argc; i++) {
 	    if (strlen(buffer) + strlen(argv[i]) + 1 >= sizeof(buffer))
-		error("Command too long, exceeds %d bytes\n",
+		fe_error("Command too long, exceeds %d bytes\n",
 		      (int)sizeof(buffer));
 	    strcat(buffer, argv[i]);
 	    if (i < argc - 1)
 		strcat(buffer, " ");
 	}
-	msg(&ctx, "About to run command: %s\n", buffer);
+	fe_msg(&ctx, "About to run command: %s\n", buffer);
 	system(buffer);
     }
 
     return 0;
 }
 	       
-static void usage(void) {
-    fprintf(stderr,
-"\n"
-"Welcome to FE V" VER ", a file-based encryptor.\n"
-"Copyright (c) Karel Kubat 2015ff, all rights reserved.\n"
-"Contact <karel@kubat.nl> for information. Distributed under GPLV3.\n"
-"\n"
-"Usage: fe [-h -? -k KEY -v -s] [-t TARGET ] command arguments\n"
-"   Or: fe [-h -? -k KEY -v -s]  -f FILE\n"	    
-"Supported flags are:\n"
-"  -h, -?    This help\n"
-"  -k KEY    Initializes the crypto functions with the stated key. When this\n"
-"            flag is absent, the FE_KEY environment variable is used. When\n"
-"            neither -k is given nor FE_KEY is present, the key is read from\n"
-"            stdin.\n"
-"  -t FILE   Marks the file as transcryption target in a following command.\n"
-"            Default is to transcrypt all files within the arguments. Flag is\n"
-"            repeatable to specify more targets.\n"
-"  -f FILE   Transcrypts the stated file\n"
-"  -v        Increases verbosity\n"
-"  -s        Sends verbose messages to stderr instead of to syslog\n"	    
-"\n"
-"When the command is given, then it is invoked with fe as a layer underneath\n"
-"to transcrypt file(s) that the command opens.\n"
-"\n");
-    exit(1);
-}

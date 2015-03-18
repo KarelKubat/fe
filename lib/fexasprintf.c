@@ -1,6 +1,6 @@
 #include "../fe.h"
 
-int xasprintf(char **bufp, const char *fmt, ...) {
+int fe_xasprintf(char **bufp, const char *fmt, ...) {
     va_list args;
     int ret;
 
@@ -9,7 +9,7 @@ int xasprintf(char **bufp, const char *fmt, ...) {
     va_end(args);
 
     if (ret < 0)
-	error("Out of memory\n");
+	fe_error("Out of memory\n");
 
     return ret;
 }

@@ -16,7 +16,10 @@ https://www.grc.com/passwords.htm and copy one of the passphrases that
 are uniquely generated on that page for each visitor. Or let your
 favorite broswer plugin such as LastPass generate one.
 
-Back up this Makefile.local to a 
+Back up this Makefile.local to a secure spot, or write down your top
+secret passphrase for a next time. You might need it if you need to
+rebuild fe. If you rebuild fe with a different magic, then you won't
+be able to transcrypt files encrypted with a previous version.
 
 
 2. Type "make"

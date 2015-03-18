@@ -15,7 +15,7 @@ static char *getmagic() {
     return magic;
 }
 
-char *seed_serialize(char const *buf) {
+char *fe_seed_serialize(char const *buf) {
     char *ret = 0, *tmp, ch;
     int i;
     BitSequence hashval[HASH_BYTE_SIZE];
@@ -25,16 +25,16 @@ char *seed_serialize(char const *buf) {
 
     /* Encrypt seed using magic */
     for (i = 0; i < strlen(buf); i++) {
-	ch = buf[i] ^ randbyte_keyed(getmagic(), (uint32_t)i, hashval);
-	xasprintf(&tmp, "%2.2x", (ch & 0xff));
-	ret = xstrcat(ret, tmp);
+	ch = buf[i] ^ fe_randbyte_keyed(getmagic(), (uint32_t)i, hashval);
+	fe_xasprintf(&tmp, "%2.2x", (ch & 0xff));
+	ret = fe_xstrcat(ret, tmp);
 	free(tmp);
     }
     
     return ret;
 }
 
-char *seed_deserialize(char const *buf) {
+char *fe_seed_deserialize(char const *buf) {
     char *ret = 0;
     int i;
     char b2[2] = {0, 0};
@@ -48,8 +48,8 @@ char *seed_deserialize(char const *buf) {
     for (i = 0; i < strlen(buf); i += 2) {
 	sscanf(buf + i, "%2x", &ui);
 	b2[0] = (char)ui;
-	b2[0] ^= randbyte_keyed(getmagic(), (uint32_t) i / 2, hashval);
-	ret = xstrcat(ret, b2);
+	b2[0] ^= fe_randbyte_keyed(getmagic(), (uint32_t) i / 2, hashval);
+	ret = fe_xstrcat(ret, b2);
     }
     
     return ret;    

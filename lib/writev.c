@@ -9,21 +9,21 @@ ssize_t writev(int fd, const struct iovec *iovec, int iovcnt) {
     BitSequence hashval[HASH_BYTE_SIZE];
 
     if (! real_writev)
-	real_writev = dllookup("writev");
-    if (! is_fd_target(fd))
+	real_writev = fe_dllookup("writev");
+    if (! fe_is_fd_target(fd))
 	return real_writev(fd, iovec, iovcnt);
 
     /* Remember the offset. Used to key all iovec buffer transcrypts. */    
     startoff = lseek(fd, 0, SEEK_SET);
     
     /* Make our own iovec and transcrypt. Make sure transcryption rehashes. */
-    iv = xmalloc(iovcnt * sizeof(struct  iovec));
+    iv = fe_xmalloc(iovcnt * sizeof(struct  iovec));
     for (i = 0; i < iovcnt; i++) {
 	iv[i].iov_len  = iovec[i].iov_len;
-	iv[i].iov_base = xmalloc(iv[i].iov_len);
+	iv[i].iov_base = fe_xmalloc(iv[i].iov_len);
 	memcpy(iv[i].iov_base, iovec[i].iov_base, iv[i].iov_len);
 	*hashval = 0;
-	cryptbuf(iv[i].iov_base, iv[i].iov_len, startoff, hashval);
+	fe_cryptbuf(iv[i].iov_base, iv[i].iov_len, startoff, hashval);
     }
 
     /* Write it out */

@@ -30,6 +30,7 @@ clean:
 	LIB=$(LIB) FE=$(FE) make -C lib clean
 	LIB=$(LIB) FE=$(FE) make -C main clean
 	LIB=$(LIB) FE=$(FE) make -C test clean
+	find . -name \*.bak -type f -exec rm {} \;
 
 dist: clean
 	(cd ..; \

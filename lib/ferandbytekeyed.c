@@ -1,6 +1,6 @@
 #include "../fe.h"
 
-char randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval) {
+char fe_randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval) {
     char *template, *data;
     HashReturn ret;
     static uint32_t last_x, required_x;
@@ -17,15 +17,15 @@ char randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval) {
 	 * as input
 	 */
 	last_x = required_x;
-	xasprintf(&template, "%u%s", last_x, key);
-	data = xstrdup(template);
+	fe_xasprintf(&template, "%u%s", last_x, key);
+	data = fe_xstrdup(template);
 	while (strlen(data) < HASH_BYTE_SIZE)
-	    data = xstrcat(data, template);
+	    data = fe_xstrcat(data, template);
 
 	/* Convert multiplied template to hashbits, then discard input data */
 	if ( (ret = Hash(HASH_BIT_SIZE, (BitSequence const *) data,
 			 strlen(data), hashval)) != SUCCESS )
-	    error("Hash algorithm indicates error %d\n", (int)ret);
+	    fe_error("Hash algorithm indicates error %d\n", (int)ret);
 
 	/*
 	{

@@ -1,6 +1,6 @@
 #include "../fe.h"
 
-void msg(FeCtx const *ctx, char const *fmt, ...) {
+void fe_msg(FeCtx const *ctx, char const *fmt, ...) {
     va_list args;
 
     if (! ctx->msg_verbosity)

@@ -8,7 +8,7 @@ int main() {
     ctx.seed = "secret";
     
     for (i = 0; i <= 10000; i++)
-	s[i] = randbyte(&ctx, i, hashval);
+	s[i] = fe_randbyte(&ctx, i, hashval);
     printf("Sequence generated, first 100 values:\n");
     for (i = 0; i < 100; i++)
 	printf("%d ", s[i]);
@@ -16,12 +16,12 @@ int main() {
     
     for (i = 0; i < 100; i++)
 	if (s[i] == s[i + 1] && s[1] == s[i + 2])
-	    error("Triplicate value at index %d\n", i);
+	    fe_error("Triplicate value at index %d\n", i);
 
     for (i = 10000; i >= 0; i--) {
-	r = randbyte(&ctx, i, hashval);
+	r = fe_randbyte(&ctx, i, hashval);
 	if (s[i] != r)
-	    error("Sequence test failed at index %d\n", i);
+	    fe_error("Sequence test failed at index %d\n", i);
     }
     
     return 0;

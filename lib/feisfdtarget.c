@@ -1,6 +1,6 @@
 #include "../fe.h"
 
-int is_fd_target(int fd) {
+int fe_is_fd_target(int fd) {
     int i;
 
     /* Stdin/out/err are not considered */

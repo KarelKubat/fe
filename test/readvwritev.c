@@ -23,16 +23,16 @@ int main() {
     setenv("FE_CTX", fectx_serialize(&ctx), 1);
 
     if ( (fd = open(fname, O_TRUNC | O_CREAT | O_WRONLY, 0644)) < 0 )
-	error("Cannot write %s: %s\n", fname, strerror(errno));
+	fe_error("Cannot write %s: %s\n", fname, strerror(errno));
     writev(fd, io, 3);
     close(fd);
     
     if ( (fd = open(fname, O_RDONLY)) < 0 )
-	error("Cannot read back %s: %s\n", fname, strerror(errno));
-    dst = xmalloc(3 * sizeof(struct iovec));
+	fe_error("Cannot read back %s: %s\n", fname, strerror(errno));
+    dst = fe_xmalloc(3 * sizeof(struct iovec));
     for (i = 0; i < 3; i++) {
 	dst[i].iov_len  = io[i].iov_len;
-	dst[i].iov_base = xmalloc(100);
+	dst[i].iov_base = fe_xmalloc(100);
     }
     readv(fd, dst, 3);
     for (i = 0; i < 3; i++) 

@@ -8,18 +8,18 @@ ssize_t pwrite(int fd, const void *buf, size_t bytes, off_t offset) {
     BitSequence hashval[HASH_BYTE_SIZE];
 
     if (! real_pwrite)
-	real_pwrite = dllookup("pwrite");
+	real_pwrite = fe_dllookup("pwrite");
     
-    if (! is_fd_target(fd))
+    if (! fe_is_fd_target(fd))
 	return real_pwrite(fd, buf, bytes, offset);
 
     /* Get copy of the buffer */
-    crypted_buf = xmalloc(bytes);
+    crypted_buf = fe_xmalloc(bytes);
     memcpy(crypted_buf, buf, bytes);
 
     /* Encrypt our copy and write it. Make sure transcryption rehashes. */
     *hashval = 0;
-    cryptbuf(crypted_buf, bytes, offset, hashval);
+    fe_cryptbuf(crypted_buf, bytes, offset, hashval);
     ret = real_pwrite(fd, crypted_buf, bytes, offset);
 
     /* Cleanup */

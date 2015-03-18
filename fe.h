@@ -53,31 +53,36 @@ typedef struct {
 #define HASH_BIT_SIZE   1024
 #define HASH_BYTE_SIZE  (HASH_BIT_SIZE / 8)
 
-/* Local functions */
-extern void cryptbuf(char *buf, size_t bufsz, size_t offset,
-		     BitSequence *hashval);
+/* Shared lib functions */
+extern void fe_cryptbuf(char *buf, size_t bufsz, size_t offset,
+			BitSequence *hashval);
+extern void *fe_dllookup(char const *name);
+extern void fe_error(char const *fmt, ...)
+    __attribute__((format(printf, 1, 2)));
+extern int fe_is_fd_target(int fd);
+extern int fe_isfile(struct stat const *st);
+extern void fe_msg(FeCtx const *ctx, char const *fmt, ...)
+    __attribute__((format(printf, 2, 3)));
+extern char fe_randbyte(FeCtx *ctx, uint32_t x, BitSequence *hashval);
+extern char fe_randbyte_keyed(char const *key, uint32_t x,
+			      BitSequence *hashval);
+extern char *fe_seed_deserialize(char const *buf);
+extern char *fe_seed_serialize(char const *buf);
+extern void fe_target_update_fd(char const *name, int fd);
+extern int fe_xasprintf(char **ret, const char *fmt, ...);
+extern void *fe_xmalloc(size_t sz);
+extern char *fe_xstrdup(char const *s);
+extern char *fe_xstrcat(char *mem, char const *s);
+extern void *fe_xrealloc(void *mem, size_t newsz);
+extern char *fe_xrealpath(char const *path);
+
+/* Local functions for the main program */
 extern void cryptfile(char const *f);
-extern void *dllookup(char const *name);
-extern void error(char const *fmt, ...) __attribute__((format(printf, 1, 2)));
 extern FeCtx *fectx (void);
 extern FeCtx *fectx_deserialize(char const *s);
 extern char *fectx_serialize(FeCtx const *ctx);
-extern int is_fd_target(int fd);
-extern int isfile(struct stat const *st);
-extern void msg(FeCtx const *ctx, char const *fmt, ...)
-    __attribute__((format(printf, 2, 3)));
-extern char randbyte(FeCtx *ctx, uint32_t x, BitSequence *hashval);
-extern char randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval);
 extern void randinit(FeCtx *ctx, char const *s);
-extern char *seed_deserialize(char const *buf);
-extern char *seed_serialize(char const *buf);
 extern void target_add(FeCtx *ctx, char const *name);
 extern void targets_msg(FeCtx *ctx);
-extern void target_update_fd(char const *name, int fd);
-extern int xasprintf(char **ret, const char *fmt, ...);
-extern void *xmalloc(size_t sz);
-extern void *xrealloc(void *mem, size_t newsz);
-extern char *xrealpath(char const *path);
-extern char *xstrcat(char *mem, char const *s);
-extern char *xstrdup(char const *s);
+extern void usage(void);
 

@@ -6,27 +6,27 @@ char *fectx_serialize(FeCtx const *ctx) {
 
     /* Verbosity and destination of verbose messages */
     if (ctx->msg_verbosity)
-	ret = xstrdup("1");
+	ret = fe_xstrdup("1");
     else
-	ret = xstrdup("0");
+	ret = fe_xstrdup("0");
 
     if (ctx->msg_dst == dst_syslog)
-	ret = xstrcat(ret, "l");
+	ret = fe_xstrcat(ret, "l");
     else
-	ret = xstrcat(ret, "e");
+	ret = fe_xstrcat(ret, "e");
 
     /* File targets */
-    xasprintf(&cp, "%d:", ctx->ntargets);
-    ret = xstrcat(ret, cp);
+    fe_xasprintf(&cp, "%d:", ctx->ntargets);
+    ret = fe_xstrcat(ret, cp);
     free(cp);
     
     for (i = 0; i < ctx->ntargets; i++) {
-	ret = xstrcat(ret, ctx->targets[i].name);
-	ret = xstrcat(ret, ":");
+	ret = fe_xstrcat(ret, ctx->targets[i].name);
+	ret = fe_xstrcat(ret, ":");
     }
 
     /* Random generator seed */
-    ret = xstrcat(ret, seed_serialize(ctx->seed));
+    ret = fe_xstrcat(ret, fe_seed_serialize(ctx->seed));
 
     /* Done */
     return ret;

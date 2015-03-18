@@ -1,9 +1,9 @@
 #include "../fe.h"
 
-char *xstrdup(char const *s) {
+char *fe_xstrdup(char const *s) {
     char *n;
     
     if (! (n = strdup(s)) )
-	error("Out of memory\n");
+	fe_error("Out of memory\n");
     return n;
 }

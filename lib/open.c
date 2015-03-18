@@ -12,10 +12,10 @@ int open(char const *path, int oflag, ...) {
 
     /* Get hook to original open */
     if (!real_open)
-	real_open = dllookup("open");
+	real_open = fe_dllookup("open");
 
     /* Open file, update fd if it's a target */
     fd = real_open(path, oflag, mode);
-    target_update_fd(path, fd);
+    fe_target_update_fd(path, fd);
     return fd;
 }

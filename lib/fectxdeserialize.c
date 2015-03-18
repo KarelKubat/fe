@@ -16,7 +16,7 @@ FeCtx *fectx_deserialize(char const *s) {
     else if (*s == '0')
 	ctx.msg_verbosity = 0;
     else
-	error("Bad FE_CTX setting at %s\n", s);
+	fe_error("Bad FE_CTX setting at %s\n", s);
     s++;
 
     if (*s == 'l')
@@ -24,7 +24,7 @@ FeCtx *fectx_deserialize(char const *s) {
     else if (*s == 'e')
 	ctx.msg_dst = dst_stderr;
     else
-	error("Bad FE_CTX setting at %s\n", s);
+	fe_error("Bad FE_CTX setting at %s\n", s);
     s++;
 
     sscanf(s, "%d", &ctx.ntargets);
@@ -32,18 +32,18 @@ FeCtx *fectx_deserialize(char const *s) {
 	s++;
     s++;
     if (ctx.ntargets) {
-	ctx.targets = xmalloc(ctx.ntargets * sizeof(Target));
+	ctx.targets = fe_xmalloc(ctx.ntargets * sizeof(Target));
 	for (i = 0; i < ctx.ntargets; i++) {
-	    ctx.targets[i].name = xstrdup("");
+	    ctx.targets[i].name = fe_xstrdup("");
 	    while (*s != ':') {
 		b2[0] = *s;
-		ctx.targets[i].name = xstrcat(ctx.targets[i].name, b2);
+		ctx.targets[i].name = fe_xstrcat(ctx.targets[i].name, b2);
 		s++;
 	    }
 	    s++;
 	}
     }
-    ctx.seed = xstrdup(seed_deserialize(s));
+    ctx.seed = fe_xstrdup(fe_seed_deserialize(s));
 
     return &ctx;
 }

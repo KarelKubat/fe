@@ -1,7 +1,7 @@
 #include "../fe.h"
 
-void *xrealloc(void *mem, size_t newsz) {
+void *fe_xrealloc(void *mem, size_t newsz) {
     if (! (mem = realloc(mem, newsz)) )
-	error("Out of memory\n");
+	fe_error("Out of memory\n");
     return mem;
 }
