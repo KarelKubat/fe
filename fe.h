@@ -76,10 +76,11 @@ extern char *fe_xstrcat(char *mem, char const *s);
 extern void *fe_xrealloc(void *mem, size_t newsz);
 extern char *fe_xrealpath(char const *path);
 
-/* Local functions for the main program */
-extern void cryptfile(char const *f);
 extern FeCtx *fectx (void);
 extern FeCtx *fectx_deserialize(char const *s);
+
+/* Local functions for the main program */
+extern void cryptfile(char const *f);
 extern char *fectx_serialize(FeCtx const *ctx);
 extern void randinit(FeCtx *ctx, char const *s);
 extern void target_add(FeCtx *ctx, char const *name);

@@ -38,12 +38,12 @@ typedef struct
     hashState;
 
 /* "incremental" hashing API */
-HashReturn Init  (hashState *state, int hashbitlen);
-HashReturn Update(hashState *state, const BitSequence *data, DataLength databitlen);
-HashReturn Final (hashState *state,       BitSequence *hashval);
+HashReturn fe_Init  (hashState *state, int hashbitlen);
+HashReturn fe_Update(hashState *state, const BitSequence *data, DataLength databitlen);
+HashReturn fe_Final (hashState *state,       BitSequence *hashval);
 
 /* "all-in-one" call */
-HashReturn Hash  (int hashbitlen,   const BitSequence *data, 
+HashReturn fe_Hash  (int hashbitlen,   const BitSequence *data, 
                   DataLength databitlen,  BitSequence *hashval);
 
 

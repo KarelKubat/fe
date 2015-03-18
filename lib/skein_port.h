@@ -27,9 +27,9 @@ typedef uint_64t        u64b_t;             /* 64-bit unsigned integer */
  * performance on x86 CPUs.  The Skein code requires the following
  * definitions for dealing with endianness:
  *
- *    Skein_Put64_LSB_First
- *    Skein_Get64_LSB_First
- *    Skein_Swap64
+ *    fe_Skein_Put64_LSB_First
+ *    fe_Skein_Get64_LSB_First
+ *    fe_Skein_Swap64
  *
  * In the reference code, these functions are implemented in a
  * very portable (and thus slow) fashion, for clarity. See the file
@@ -37,8 +37,8 @@ typedef uint_64t        u64b_t;             /* 64-bit unsigned integer */
  * these functions fast(er) on x86 platforms.
  */
 
-u64b_t Skein_Swap64(u64b_t w64);
-void   Skein_Put64_LSB_First(u08b_t *dst,const u64b_t *src,size_t bCnt);
-void   Skein_Get64_LSB_First(u64b_t *dst,const u08b_t *src,size_t wCnt);
+u64b_t fe_Skein_Swap64(u64b_t w64);
+void   fe_Skein_Put64_LSB_First(u08b_t *dst,const u64b_t *src,size_t bCnt);
+void   fe_Skein_Get64_LSB_First(u64b_t *dst,const u08b_t *src,size_t wCnt);
 
 #endif   /* ifndef _SKEIN_PORT_H_ */

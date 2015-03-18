@@ -23,7 +23,7 @@ char fe_randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval) {
 	    data = fe_xstrcat(data, template);
 
 	/* Convert multiplied template to hashbits, then discard input data */
-	if ( (ret = Hash(HASH_BIT_SIZE, (BitSequence const *) data,
+	if ( (ret = fe_Hash(HASH_BIT_SIZE, (BitSequence const *) data,
 			 strlen(data), hashval)) != SUCCESS )
 	    fe_error("Hash algorithm indicates error %d\n", (int)ret);
 
