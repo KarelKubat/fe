@@ -2,4 +2,6 @@ lib/*.o
 lib/libfe.dylib
 lib/magic.h
 main/fe
+main/*.o
+main/lib*.a
 test/*.t
