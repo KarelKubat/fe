@@ -17,6 +17,8 @@ $(LIB): $(O)
 	$(CC) -Wall -Werror -c \
 	      $(shell ../etc/c-conf -c ../c-conf.cache so-cflags) \
 	      -DVER=\"$(VER)\" -DLIB=\"$(LIB)\" \
+	      -DHAVE_LIBIO=$(shell ../etc/c-conf -c ../c-conf.cache \
+			     ifheader libio.h HAVE_LIBIO_H_) \
 	      -DMAGIC=\"$(MAGIC)\" -DLIBDIR=\"$(LIBDIR)\" \
 	      -DBINDIR=\"$(BINDIR)\" $(OPTFLAG) $<
 

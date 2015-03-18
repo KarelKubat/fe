@@ -6,7 +6,9 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#ifdef HAVE_LIBIO_H_
 #include <libio.h>
+#endif
 #include <pwd.h>
 #include <stdarg.h>
 #include <stdint.h>
