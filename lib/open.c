@@ -5,6 +5,8 @@ int open(char const *path, int oflag, ...) {
     va_list args;
     int mode, fd;
 
+    fprintf(stderr, ">>>>>>> in open\n");
+
     /* Get mode arg */
     va_start(args, oflag);
     mode = va_arg(args, int);

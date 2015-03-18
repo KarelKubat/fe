@@ -13,7 +13,7 @@ $(LIBAR): $(O)
 %.o: %.c
 	$(CC) -c $(OPTFLAG) -DLIB=\"$(LIB)\" -DVER=\"$(VER)\" -Wall -Werror \
               -DLIBDIR=\"$(LIBDIR)\" -DBINDIR=\"$(BINDIR)\" \
-	      -DMAGIC=\"$(MAGIC)\" $<
+	      -DMAGIC=\"$(MAGIC)\" -DUSYS=$(USYS) $<
 
 usage.o: usage.c ../Makefile
 fe.o: fe.c ../Makefile

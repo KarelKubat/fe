@@ -1,13 +1,27 @@
-BINDIR  = /usr/local/bin
-LIBDIR  = /usr/local/lib
-FE      = fe
-LIB     = $(shell etc/c-conf -c c-conf.cache so-name $(FE))
-VER     = 1.00
-OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
-TAR     = /tmp/fe-$(VER).tar.gz
-
 # Versioning:
 # [KK 2015-03-13] 1.00, initial
+VER     = 1.00
+
+# Target paths
+BINDIR  = /usr/local/bin
+LIBDIR  = /usr/local/lib
+
+# Internal settings
+FE      = fe
+LIB     = $(shell etc/c-conf -c c-conf.cache so-name $(FE))
+OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
+
+# Dist archive
+TAR     = /tmp/fe-$(VER).tar.gz
+
+# What system are we on
+UNAME   = $(shell uname)
+ifeq ($(UNAME), Darwin)
+    USYS = 1
+endif
+ifeq ($(UNAME), Linux)
+    USYS = 2
+endif
 
 include Makefile.local
 
@@ -15,7 +29,8 @@ foo:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
 	  OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" make -C lib
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
-	  OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" make -C main
+	  USYS=$(USYS) OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" \
+	  make -C main
 
 test: install
 	LIB=$(LIB) FE=$(FE) OPTFLAG=$(OPTFLAG) make -C test
@@ -24,7 +39,8 @@ install:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
 	  OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" make -C lib  install
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
-	  OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" make -C main install
+	  USYS=$(USYS) OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" \
+	  make -C main install
 
 clean:
 	LIB=$(LIB) FE=$(FE) make -C lib clean

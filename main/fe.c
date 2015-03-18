@@ -59,11 +59,18 @@ int main(int argc, char **argv) {
 	fe_error("No action taken, try 'fe -h' for an overview\n");
     } else {
 	/* Going to launch the command with the shared object underneath */
+	
+#if USYS == 1
 	/* For MacOSX: */
 	setenv("DYLD_INSERT_LIBRARIES", LIBDIR "/" LIB, 1);
 	setenv("DYLD_FORCE_FLAT_NAMESPACE", "1", 1);
+#elif USYS == 2
 	/* For Linux: */
 	setenv("LD_PRELOAD", LIBDIR "/" LIB, 1);
+#else
+#error "uname-based system unknown, check the Makefile and make sure \
+        that USYS is set"
+#endif
 
 	/* Run the intended command */
 	buffer[0] = 0;

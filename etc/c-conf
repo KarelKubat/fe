@@ -419,14 +419,10 @@ CFLAGS = -c -g -Wall \$(shell c-conf so-cflags)
 ENDHELP
 
     usage() if ($#_ > -1);
-    my $flags;
-    if (uname() eq 'Darwin') {
-	$flags = '-fPIC';
-    } elsif (uname() eq 'Linux') {
-	$flags = '-fpic';
-    }
-    msg ("Shared object compilation flags: '$flags'\n");
-    output ($flags);
+    # Linux also supports -fpic (lower case) but apparently for only
+    # smaller objects. -fPIC always seems to work. Darwin has -fPIC only.
+    msg("Shared object compilation flags: '-fPIC'\n");
+    output('-fPIC');
 }
 
 # Linkage flags to make an so.
