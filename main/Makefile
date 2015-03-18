@@ -15,6 +15,7 @@ $(LIBAR): $(O)
 	      -DMAGIC=\"$(MAGIC)\" $<
 
 usage.o: usage.c ../Makefile
+fe.o: fe.c ../Makefile
 
 install: $(BINDIR)/fe
 $(BINDIR)/fe: fe ../Makefile

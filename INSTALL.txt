@@ -38,3 +38,23 @@ Type "make install". You might want to do this as user root (e.g., via
 
 Type "make test". This will run a number of (simple) checks to prove
 the sanity of the installed software.
+
+
+How is fe versioned
+-------------------
+
+Fe's version numbers start at 1.00. The 1 is the major version number
+and increases only when the transcryption algorithm changes. The minor
+number 00 is reserved for small updates.
+
+When installing a new version of fe with a different major version
+number, follow these steps:
+
+- Before installing the new version, create an plaintext version of
+  your encrypted files. You will need to do this with the previously
+  used version of fe.
+- Then install the new version and re-create the encrypted files.
+
+NOTE THAT FILES ENCRYPTED WITH ONE MAJOR VERSION CANNOT BE DECRYPTED
+WITH ANOTHER MAJOR VERSION. FE CANNOT DETECT THIS. YOU ARE RESPONSIBLE
+FOR YOUR OWN HOUSEKEEPING.

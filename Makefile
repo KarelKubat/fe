@@ -1,9 +1,9 @@
 BINDIR  = /usr/local/bin
 LIBDIR  = /usr/local/lib
 FE      = fe
-LIB     = lib$(FE).dylib
+LIB     = $(shell etc/c-conf -c c-conf.cache so-name $(FE))
 VER     = 1.00
-OPTFLAG = -O2
+OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
 TAR     = /tmp/fe-$(VER).tar.gz
 
 # Versioning:
@@ -31,6 +31,7 @@ clean:
 	LIB=$(LIB) FE=$(FE) make -C main clean
 	LIB=$(LIB) FE=$(FE) make -C test clean
 	find . -name \*.bak -type f -exec rm {} \;
+	rm -f c-conf.cache
 
 dist: clean
 	(cd ..; \

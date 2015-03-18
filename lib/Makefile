@@ -9,16 +9,20 @@ $(LIBDIR)/$(LIB): $(LIB)
 	install $(LIB) $(LIBDIR)
 
 $(LIB): $(O)
-	$(CC) $(OPTFLAG) -dynamiclib -Wl,-single_module -o $(LIB) $(O)
+	$(CC) $(OPTFLAG) \
+	      $(shell ../etc/c-conf -c ../c-conf.cache so-lflags) \
+	      -o $(LIB) $(O)
 
 %.o: %.c
-	$(CC) -Wall -Werror -c -fPIC -DVER=\"$(VER)\" -DLIB=\"$(LIB)\" \
+	$(CC) -Wall -Werror -c \
+	      $(shell ../etc/c-conf -c ../c-conf.cache so-cflags) \
+	      -DVER=\"$(VER)\" -DLIB=\"$(LIB)\" \
 	      -DMAGIC=\"$(MAGIC)\" -DLIBDIR=\"$(LIBDIR)\" \
 	      -DBINDIR=\"$(BINDIR)\" $(OPTFLAG) $<
 
 feseedserialize.o: feseedserialize.c magic.h
 magic.h: ../Makefile.local
-	echo "$(MAGIC)" | perl magic.pl > magic.h
+	echo "$(MAGIC)" | perl ../etc/magic.pl > magic.h
 
 clean:
 	rm -f $(O) $(LIB) magic.h
