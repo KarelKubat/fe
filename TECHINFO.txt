@@ -1,0 +1,31 @@
+How it works: shared object preloading
+--------------------------------------
+
+Fe's magic is located in a shared library /usr/local/lib/libfe.so (or .dylib on MacOSX). This library defines a number of libc's routines:
+- open()
+- read() and write()
+- close()
+- and similar calls, such as readv(), writev() and pread(), pwrite()
+
+Fe makes sure that this library is inserted underneath spawned programs, so that their libc calls are caught in the library and so that the file contents may be transcrypted if necessary. This works by setting the environment variable LD_PRELOAD (Linux) or DYLD_INSERT_LIBRARIES (MacOSX). This setting can be seen; if you run
+    fe printenv
+then this will appear.
+
+Fe's runtime context
+--------------------
+
+Each preloaded libc function (open(), read() etc.) must be able to determine what it should do:
+- Is a given file a transcryption target or not
+- If yes, using what key should the data be transcrypted
+
+This information is kept in an environment variable FE_CTX. Each process that is spawned by fe invokes functions in fe's shared object. The shared object functions inspect the context. The user secret therefore also has to appear in the context, but it's there in an encrypted form (using the built-in magic, see INSTALL.txt).
+
+Transcryption
+-------------
+
+All data that passes through fe's own read() or write() (or similar functions) is eligible for transcryption. This depends on whether the associated file is a target.
+
+Data transcryption is a simple XOR operation with a stream of pseudorandom bytes. The generation of the pseudorandom stream must of course be repeatable and depends only on the offset in the file, meaning that each n'th byte in a file must be XOR-ed with the same pseudorandom value in order to encrypt or decrypt it.
+
+The generation of pseudorandom bytes occurs in blocks of 1024 bits at a time using Skein hashing. The input for the hash function is the user secret and the file offset rounded down to the next multiple of 128 bytes (1024 bits). That way a new hash value has to be computed only each 128 bytes, which makes transcryption of blocks of data much faster.
+
