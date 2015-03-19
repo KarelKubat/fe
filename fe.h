@@ -21,6 +21,10 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 
+/* Supported systems */
+#define UN_DARWIN 1
+#define UN_LINUX  2
+
 /* Local includes */
 #include "lib/SHA3api_ref.h"
 

@@ -17,10 +17,10 @@ TAR     = /tmp/fe-$(VER).tar.gz
 # What system are we on
 UNAME   = $(shell uname)
 ifeq ($(UNAME), Darwin)
-    USYS = 1
+    USYS = UN_DARWIN
 endif
 ifeq ($(UNAME), Linux)
-    USYS = 2
+    USYS = UN_LINUX
 endif
 
 include Makefile.local

@@ -34,6 +34,9 @@ What good is that? There is a number of use cases:
   want the file to be plain-text visible. But, your PHP app needs to
   access it. To start up your app, you type:
       fe -t /opt/app/etc/app.config  apachectl start
+  Again, all processes that are started by fe will perceive the
+  targeted configuration file as plaintext (so, apachectl, hence
+  httpd, hence mod_php that runs in Apache). 
 
 - You want to start an entire new shell on top of fe's encryption
   layer, so that the encrypted file $HOME/etc/mysecretfile.txt appears
@@ -42,7 +45,9 @@ What good is that? There is a number of use cases:
       fe -t ~/etc/mysecretfile.txt  bash
   Next, inside that bash, the file appears plain-text. E.g.,
       cat ~/etc/mysecretfile.txt
-  will show the plaintext content.
+  will show the plaintext content. When you run
+      emacs ~/etc/mysecretfile.txt
+  then emacs will just see a plaintext file.
 
 Why use fe and not a different utility?
 ---------------------------------------

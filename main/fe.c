@@ -60,11 +60,11 @@ int main(int argc, char **argv) {
     } else {
 	/* Going to launch the command with the shared object underneath */
 	
-#if USYS == 1
+#if USYS == UN_DARWIN
 	/* For MacOSX: */
 	setenv("DYLD_INSERT_LIBRARIES", LIBDIR "/" LIB, 1);
 	setenv("DYLD_FORCE_FLAT_NAMESPACE", "1", 1);
-#elif USYS == 2
+#elif USYS == UN_LINUX
 	/* For Linux: */
 	setenv("LD_PRELOAD", LIBDIR "/" LIB, 1);
 #else
