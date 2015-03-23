@@ -16,41 +16,56 @@ static char *getmagic() {
 }
 
 char *fe_seed_serialize(char const *buf) {
-    char *ret = 0, *tmp, ch;
-    int i;
-    BitSequence hashval[HASH_BYTE_SIZE];
+    char *ret = 0, *tmp;
+    int i, j;
+    BitSequence magichash[HASH_BYTE_SIZE];
+    HashReturn r;
 
-    /* Make sure a next hashblock is obtained */
-    hashval[0] = 0;
-
-    /* Encrypt seed using magic */
-    for (i = 0; i < strlen(buf); i++) {
-	ch = buf[i] ^ fe_randbyte_keyed(getmagic(), (uint32_t)i, hashval);
-	fe_xasprintf(&tmp, "%2.2x", (ch & 0xff));
+    /* Get a hash of our own magic */
+    if ( (r = fe_Hash(HASH_BIT_SIZE, (BitSequence const *)getmagic(),
+		      strlen(magic), magichash)) )
+	fe_error("Hash algorithm indicates error %d\n", (int)r);
+    
+    /* Encrypt seed using magic. */
+    for (i = 0, j = 0; i < HASH_BYTE_SIZE && j < strlen(buf); i++, j++) 
+	magichash[i] ^= buf[j];
+    /* Build up as one string */
+    for (i = 0; i < HASH_BYTE_SIZE; i++) {
+	fe_xasprintf(&tmp, "%2.2x", (magichash[i] & 0xff));
 	ret = fe_xstrcat(ret, tmp);
 	free(tmp);
     }
+
+#if 0
+    fprintf(stderr, "Seed serialized to: [%s]\n", ret);
+#endif	
     
     return ret;
 }
 
 char *fe_seed_deserialize(char const *buf) {
-    char *ret = 0;
     int i;
-    char b2[2] = {0, 0};
     unsigned int ui;
-    BitSequence hashval[HASH_BYTE_SIZE];
-    
-    /* Make sure a next hashblock is obtained */
-    hashval[0] = 0;
+    BitSequence magichash[HASH_BYTE_SIZE + 1];
+    HashReturn r;
 
+#if 0    
+    fprintf(stderr, "Deserializing seed: [%s]\n", buf);
+#endif
+    
+    /* Terminate hash stuff */
+    memset(magichash, 0, sizeof(magichash));
+    
+    /* Get a hash of our own magic */
+    if ( (r = fe_Hash(HASH_BIT_SIZE, (BitSequence const *)getmagic(),
+		      strlen(magic), magichash)) )
+	fe_error("Hash algorithm indicates error %d\n", (int)r);
+    
     /* Decrypt seed using magic */
     for (i = 0; i < strlen(buf); i += 2) {
 	sscanf(buf + i, "%2x", &ui);
-	b2[0] = (char)ui;
-	b2[0] ^= fe_randbyte_keyed(getmagic(), (uint32_t) i / 2, hashval);
-	ret = fe_xstrcat(ret, b2);
+	magichash[i / 2] ^= (char)ui;
     }
     
-    return ret;    
+    return fe_xstrdup( (char*) magichash );
 }

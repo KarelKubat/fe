@@ -122,3 +122,18 @@ For example, if a brute-forced key decrypts a file to say "hello", is
 that the right key? No-one knows; there's also a key to decrypt the
 same bytes into "world". Brute-forcing has just become a bit harder.
 (Nevertheless, make sure that you use "good" keys when using fe.)
+
+How to encrypt existing files
+-----------------------------
+
+If you have plaintext files and want to encrypt them for usage with
+fe, then there are basically two options:
+
+1. Use fe's flag -f, as in:
+     fe -t plaintext.txt
+     mv plaintext.txt encrypted.txt
+
+2. Have a standard utility like "cp" do it for you, whilst instructing
+   fe that the output file is a transcryption target:
+     fe -t encrypted.txt  cp plaintext.txt encrypted.txt
+     rm plaintext.txt

@@ -27,6 +27,10 @@ endif
 include Makefile.local
 
 foo:
+	@cat etc/Makefile.help
+	@exit 1
+
+local:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
 	  OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" make -C lib
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
