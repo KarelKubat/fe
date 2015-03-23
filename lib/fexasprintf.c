@@ -5,11 +5,8 @@ int fe_xasprintf(char **bufp, const char *fmt, ...) {
     int ret;
 
     va_start(args, fmt);
-    ret = vasprintf(bufp, fmt, args);
+    ret = fe_xvasprintf(bufp, fmt, args);
     va_end(args);
-
-    if (ret < 0)
-	fe_error("Out of memory\n");
 
     return ret;
 }

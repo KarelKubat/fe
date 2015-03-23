@@ -7,6 +7,8 @@ ssize_t readv(int fd, const struct iovec *iov, int iovcnt) {
     int i;
     BitSequence hashval[HASH_BYTE_SIZE];
 
+    fe_msg(fectx(), "Request to readv(%d, ..., %d)\n", fd, iovcnt);
+
     if (! real_readv)
 	real_readv = fe_dllookup("readv");
     if (! fe_is_fd_target(fd))

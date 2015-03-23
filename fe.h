@@ -63,6 +63,7 @@ typedef struct {
 #define HASH_BYTE_SIZE  (HASH_BIT_SIZE / 8)
 
 /* Shared lib functions */
+extern void fe_close_fd(int fd);
 extern void fe_cryptbuf(char *buf, size_t bufsz, size_t offset,
 			BitSequence *hashval);
 extern void *fe_dllookup(char const *name);
@@ -77,13 +78,15 @@ extern char fe_randbyte_keyed(char const *key, uint32_t x,
 			      BitSequence *hashval);
 extern char *fe_seed_deserialize(char const *buf);
 extern char *fe_seed_serialize(char const *buf);
-extern void fe_target_update_fd(char const *name, int fd);
+extern void fe_target_by_fd(int oldfd, int newfd);
+extern void fe_target_by_path(char const *name, int newfd);
 extern int fe_xasprintf(char **ret, const char *fmt, ...);
 extern void *fe_xmalloc(size_t sz);
 extern char *fe_xstrdup(char const *s);
 extern char *fe_xstrcat(char *mem, char const *s);
 extern void *fe_xrealloc(void *mem, size_t newsz);
 extern char *fe_xrealpath(char const *path);
+extern int fe_xvasprintf(char **ret, char const *fmt, va_list args);
 
 extern FeCtx *fectx (void);
 extern FeCtx *fectx_deserialize(char const *s);

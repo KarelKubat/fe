@@ -38,6 +38,7 @@ FeCtx *fectx_deserialize(char const *s) {
 	    while (*s != ':') {
 		b2[0] = *s;
 		ctx.targets[i].name = fe_xstrcat(ctx.targets[i].name, b2);
+		ctx.targets[i].fd = -1;
 		s++;
 	    }
 	    s++;
@@ -47,5 +48,5 @@ FeCtx *fectx_deserialize(char const *s) {
 
     return &ctx;
 }
-	
+
 	

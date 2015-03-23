@@ -5,6 +5,9 @@ ssize_t pread(int fd, void *buf, size_t bytes, off_t offset) {
     ssize_t ret;
     BitSequence hashval[HASH_BYTE_SIZE];
 
+    fe_msg(fectx(), "Request to pread(%d, ..., %lu, %lld)\n",
+	   fd, bytes, offset);
+
     if (! real_pread)
 	real_pread = fe_dllookup("pread");
 
