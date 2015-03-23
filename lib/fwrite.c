@@ -12,7 +12,7 @@ size_t fwrite(void const *buf, size_t sz, size_t items, FILE *f) {
 	real_fwrite = fe_dllookup("fwrite");
 
     fe_msg(fectx(), "Request to fwrite(..., %ld, %ld, fd=%d)\n",
-	   sz, items, fileno(f));
+	   (long)sz, (long)items, fileno(f));
 
     if (! (fe_is_fd_target(fileno(f))) )
 	return real_fwrite(buf, sz, items, f);

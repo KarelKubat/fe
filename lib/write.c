@@ -7,7 +7,8 @@ ssize_t write(int fd, const void *buf, size_t bytes) {
     void *crypted_buf;
     BitSequence hashval[HASH_BYTE_SIZE];
 
-    fe_msg(fectx(), "Request to write(%d, ..., %lu)\n", fd, bytes);
+    fe_msg(fectx(), "Request to write(%d, ..., %lu)\n",
+	   fd, (long unsigned)bytes);
 
     if (! real_write)
 	real_write = fe_dllookup("write");

@@ -10,7 +10,7 @@ size_t fread(void *buf, size_t sz, size_t items, FILE *f) {
 	real_fread = fe_dllookup("fread");
 
     fe_msg(fectx(), "Request to fread(..., %ld, %ld, fd=%d)\n",
-	   sz, items, fileno(f));
+	   (long)sz, (long)items, fileno(f));
 
     if (! fe_is_fd_target(fileno(f)) )
 	return real_fread(buf, sz, items, f);
