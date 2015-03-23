@@ -24,8 +24,8 @@ What good is that? There is a number of use cases:
       fe  grep amazon mysecretfile.txt
   Here, fe will assume that "amazon" and "mysecretfile.txt" are
   encryption targets, but since "amazon" probably isn't a file, that's
-  fine. If you need to be sure to restrict the target, you can always
-  use the flag -t:
+  fine. If you need to be sure to restrict the target to only
+  "mysecretfile.txt", then you can always use flag -t:
       fe -t mysecretfile  grep amazon mysecretfile.txt
 
 - Your favorite LAMP application uses a configuration file, say
@@ -36,7 +36,10 @@ What good is that? There is a number of use cases:
       fe -t /opt/app/etc/app.config  apachectl start
   Again, all processes that are started by fe will perceive the
   targeted configuration file as plaintext (so, apachectl, hence
-  httpd, hence mod_php that runs in Apache). 
+  httpd, hence mod_php that runs in Apache). Here by the way you need
+  to tell fe what the target file is; there's no way fe could guess
+  from "apachectl start" that "/opt/app/etc/app.config" is an
+  encryption target.
 
 - You want to start an entire new shell on top of fe's encryption
   layer, so that the encrypted file $HOME/etc/mysecretfile.txt appears
@@ -61,9 +64,11 @@ particular strengths:
   it all.
 
 - File-based utilities such as pgp work with two files: one encrypted,
-  one plaintext. The plaintext version appears on disk once the
-  utility is asked to decrypt it. The same also goes for e.g.
-  encrypted zip files. Again, others can see it if they time it right.
+  one plaintext. If you store sensitive information in a pgp-encrypted
+  file, then your workflow is probably: decrypt/edit/encrypt; and
+  therefore, the plaintext version appears on disk once the utility is
+  asked to decrypt it. The same also goes for e.g. encrypted zip
+  files. Again, others can see it if they time it right.
 
 - The case is even stronger when you consider the underlying disk.
   Once a plaintext file has been on the disk (even though it's removed
@@ -110,7 +115,25 @@ remember). Therefore, don't loose your key. There is no way to get
 back plaintext information once it's been encrypted and the key is
 lost.
 
+While that looks like a flaw, consider this. Given the fact that there
+is no information whether a transcryption is using the right key or
+not, there must be countless keys that produce some meaningful output.
+For example, if a brute-forced key decrypts a file to say "hello", is
+that the right key? No-one knows; there's also a key to decrypt the
+same bytes into "world". Brute-forcing has just become a bit harder.
+(Nevertheless, make sure that you use "good" keys when using fe.)
 
+How to encrypt existing files
+-----------------------------
 
+If you have plaintext files and want to encrypt them for usage with
+fe, then there are basically two options:
 
+1. Use fe's flag -f, as in:
+     fe -t plaintext.txt
+     mv plaintext.txt encrypted.txt
 
+2. Have a standard utility like "cp" do it for you, whilst instructing
+   fe that the output file is a transcryption target:
+     fe -t encrypted.txt  cp plaintext.txt encrypted.txt
+     rm plaintext.txt

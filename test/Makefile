@@ -15,7 +15,7 @@ foo: $(T)
 	@echo; \
 	echo "All tests completed successfully."
 
-%.t: %.c
+%.t: %.c ../lib/$(LIB)
 	$(CC) -Wall -Werror -DMAGIC=\"dontcare\" -o $@ $< \
 	      -L../main -llocal -l$(FE) \
 	      $(shell ../etc/c-conf -c ../c-conf.cache lib dl)

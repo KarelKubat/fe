@@ -9,7 +9,8 @@ LIBDIR  = /usr/local/lib
 # Internal settings
 FE      = fe
 LIB     = $(shell etc/c-conf -c c-conf.cache so-name $(FE))
-OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
+#OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
+OPTFLAG = -g
 
 # Dist archive
 TAR     = /tmp/fe-$(VER).tar.gz
@@ -26,6 +27,10 @@ endif
 include Makefile.local
 
 foo:
+	@cat etc/Makefile.help
+	@exit 1
+
+local:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
 	  OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" make -C lib
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
