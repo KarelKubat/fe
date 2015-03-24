@@ -10,29 +10,25 @@ for my $i (1..10000) {
     }
 }
 close($of);
-print("File creation: ", tv_interval($t0), "sec\n");
+print("File creation        : ", tv_interval($t0), "sec\n");
 
 # cp test
 $t0 = [gettimeofday()];
 system("cp /tmp/large.txt /tmp/large0.txt") and die;
-print("Plain cp: ", tv_interval($t0), "\n");
+print("Plain cp             : ", tv_interval($t0), "sec\n");
 
 # Transcrypt inline
 $t0 = [gettimeofday()];
 system("fe -k secret -f /tmp/large.txt") and die;
-print("Inline transcryption: ", tv_interval($t0), "sec\n");
+print("Inline transcryption : ", tv_interval($t0), "sec\n");
 
 # Transcrypt using cp
 $t0 = [gettimeofday()];
 system("fe -k secret -t /tmp/large.txt cp /tmp/large.txt /tmp/large1.txt")
   and die;
-print("Transcribing via cp: ", tv_interval($t0), "sec\n");
+print("Transcribing via cp  : ", tv_interval($t0), "sec\n");
 
 # Check
 system("diff /tmp/large0.txt /tmp/large1.txt")
   and die("encryption/decryption failed, ",
 	  "/tmp/large.txt and /tmp/large1.txt differ\n");
-
-
-      
-

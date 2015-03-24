@@ -8,12 +8,11 @@ size_t fread(void *buf, size_t sz, size_t items, FILE *f) {
 
     if (! real_fread)
 	real_fread = fe_dllookup("fread");
+    if (! fe_is_fd_target(fileno(f)) )
+	return real_fread(buf, sz, items, f);
 
     fe_msg(fectx(), "Request to fread(..., %ld, %ld, fd=%d)\n",
 	   (long)sz, (long)items, fileno(f));
-
-    if (! fe_is_fd_target(fileno(f)) )
-	return real_fread(buf, sz, items, f);
 
     startoff = (off_t)ftell(f);
     *hashval = 0;

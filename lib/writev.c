@@ -8,12 +8,12 @@ ssize_t writev(int fd, const struct iovec *iovec, int iovcnt) {
     ssize_t ret;
     BitSequence hashval[HASH_BYTE_SIZE];
 
-    fe_msg(fectx(), "Request to writev(%d, ..., %d)\n", fd, iovcnt);
-
     if (! real_writev)
 	real_writev = fe_dllookup("writev");
     if (! fe_is_fd_target(fd))
 	return real_writev(fd, iovec, iovcnt);
+
+    fe_msg(fectx(), "Request to writev(%d, ..., %d)\n", fd, iovcnt);
 
     /* Remember the offset. Used to key all iovec buffer transcrypts. */    
     startoff = lseek(fd, 0, SEEK_SET);

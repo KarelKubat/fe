@@ -15,6 +15,11 @@ char *fectx_serialize(FeCtx const *ctx) {
     else
 	ret = fe_xstrcat(ret, "e");
 
+    if (ctx->ignore_noncaught)
+	ret = fe_xstrcat(ret, "1");
+    else
+	ret = fe_xstrcat(ret, "0");
+
     /* File targets */
     fe_xasprintf(&cp, "%d:", ctx->ntargets);
     ret = fe_xstrcat(ret, cp);

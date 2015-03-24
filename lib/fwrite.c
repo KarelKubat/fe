@@ -10,12 +10,11 @@ size_t fwrite(void const *buf, size_t sz, size_t items, FILE *f) {
 
     if (! real_fwrite)
 	real_fwrite = fe_dllookup("fwrite");
+    if (! (fe_is_fd_target(fileno(f))) )
+	return real_fwrite(buf, sz, items, f);
 
     fe_msg(fectx(), "Request to fwrite(..., %ld, %ld, fd=%d)\n",
 	   (long)sz, (long)items, fileno(f));
-
-    if (! (fe_is_fd_target(fileno(f))) )
-	return real_fwrite(buf, sz, items, f);
 
     /* Get a copy of the buffer */
     crypted_buf = fe_xmalloc(sz * items);

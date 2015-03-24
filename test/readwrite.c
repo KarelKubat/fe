@@ -8,12 +8,11 @@ char buf2[256];
 
 int main() {
     int fd, i;
-    static FeCtx ctx;
+    FeCtx *ctx;
     off_t off;
 
-    randinit(&ctx, "user secret");
-    target_add(&ctx, fname);
-    setenv("FE_CTX", fectx_serialize(&ctx), 1);
+    ctx = fe_setup("user secret", 1, dst_syslog, 1);
+    fe_target_add(ctx, fname);
 
     if ( (fd = open(fname, O_CREAT | O_WRONLY, 0644)) < 0 )
 	fe_error("Cannot write %s: %s\n", fname, strerror(errno));

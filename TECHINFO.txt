@@ -60,5 +60,11 @@ important ones are implemented in fe's shared object, but notably
 fprintf() and fscanf() are not. (Programmer's note: how would you
 implement transcryption while intercepting fscanf()?)
 
-Therefore, programs that access files using such functions are not
-transcrypted by fe.
+Therefore, programs that access files using such functions are handled
+in either of two ways:
+- Either, fe ignores fscanf() and such functions, and the information
+  will occur in plaintext on disk;
+- Or, fe aborts when a program uses such a function, in order to avoid
+  plaintext information being committed to disk.
+The behavior is controlled using flag -i.
+

@@ -1,6 +1,7 @@
 # Versioning:
-# [KK 2015-03-13] 1.00, initial
-VER     = 1.00
+# [KK 2015-03-23] 1.00 Initial
+# [KK 2015-03-24] 1.01 Flags -i and -v, FE_CTX changed due to -i
+VER     = 1.01
 
 # Target paths
 BINDIR  = /usr/local/bin
@@ -9,7 +10,7 @@ LIBDIR  = /usr/local/lib
 # Internal settings
 FE      = fe
 LIB     = $(shell etc/c-conf -c c-conf.cache so-name $(FE))
-#OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
+OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
 OPTFLAG = -g
 
 # Dist archive

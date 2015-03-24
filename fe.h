@@ -46,6 +46,8 @@ typedef struct {
     /* Messaging */
     int msg_verbosity;
     MsgDst msg_dst;
+    /* Ignore noncaught libc calls or not */
+    int ignore_noncaught;
     /* File targets */
     int ntargets;
     Target *targets;
@@ -78,6 +80,9 @@ extern char fe_randbyte_keyed(char const *key, uint32_t x,
 			      BitSequence *hashval);
 extern char *fe_seed_deserialize(char const *buf);
 extern char *fe_seed_serialize(char const *buf);
+extern FeCtx *fe_setup(char const *key, int verbosity, MsgDst dst,
+		       int ignore_uncaught);
+extern void fe_target_add(FeCtx *ctx, char const *name);
 extern void fe_target_by_fd(int oldfd, int newfd);
 extern void fe_target_by_path(char const *name, int newfd);
 extern int fe_xasprintf(char **ret, const char *fmt, ...);
@@ -90,12 +95,5 @@ extern int fe_xvasprintf(char **ret, char const *fmt, va_list args);
 
 extern FeCtx *fectx (void);
 extern FeCtx *fectx_deserialize(char const *s);
-
-/* Local functions for the main program */
-extern void cryptfile(char const *f);
 extern char *fectx_serialize(FeCtx const *ctx);
-extern void randinit(FeCtx *ctx, char const *s);
-extern void target_add(FeCtx *ctx, char const *name);
-extern void targets_msg(FeCtx *ctx);
-extern void usage(void);
 

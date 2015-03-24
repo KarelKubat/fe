@@ -2,8 +2,9 @@
 
 char *fe_xstrdup(char const *s) {
     char *n;
-    
-    if (! (n = strdup(s)) )
+
+    n = strdup(s ? s : "");
+    if (! n)
 	fe_error("Out of memory\n");
     return n;
 }

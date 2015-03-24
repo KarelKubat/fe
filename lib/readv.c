@@ -7,14 +7,13 @@ ssize_t readv(int fd, const struct iovec *iov, int iovcnt) {
     int i;
     BitSequence hashval[HASH_BYTE_SIZE];
 
-    fe_msg(fectx(), "Request to readv(%d, ..., %d)\n", fd, iovcnt);
-
     if (! real_readv)
 	real_readv = fe_dllookup("readv");
     if (! fe_is_fd_target(fd))
 	return real_readv(fd, iov, iovcnt);
 
     /* Read buffers and transcrypt them. Make sure transcryption rehashes. */
+    fe_msg(fectx(), "Request to readv(%d, ..., %d)\n", fd, iovcnt);
     startoff = lseek(fd, 0, SEEK_SET);
     ret = real_readv(fd, iov, iovcnt);
     *hashval = 0;

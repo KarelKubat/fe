@@ -6,11 +6,10 @@ FeCtx ctx;
 
 int main() {
     FILE *f;
+    FeCtx *ctx;
 
-    randinit(&ctx, "user secret");
-    ctx.msg_verbosity = 1;
-    target_add(&ctx, "/tmp/bufferedio.txt");
-    setenv("FE_CTX", fectx_serialize(&ctx), 1);
+    ctx = fe_setup("user secret", 1, dst_syslog, 1);
+    fe_target_add(ctx, "/tmp/bufferedio.txt");
 
     printf("Opening file for writing using fopen...\n");
     if (! (f = fopen("/tmp/bufferedio.txt", "w")) )

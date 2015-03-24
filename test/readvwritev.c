@@ -14,13 +14,11 @@ struct iovec io[] = {
 
 int main() {
     int fd, i;
-    static FeCtx ctx;
+    FeCtx *ctx;
     struct iovec *dst;
 
-    randinit(&ctx, "user secret");
-    ctx.msg_verbosity = 1;
-    target_add(&ctx, fname);
-    setenv("FE_CTX", fectx_serialize(&ctx), 1);
+    ctx = fe_setup("user secret", 1, dst_syslog, 1);
+    fe_target_add(ctx, fname);
 
     if ( (fd = open(fname, O_TRUNC | O_CREAT | O_WRONLY, 0644)) < 0 )
 	fe_error("Cannot write %s: %s\n", fname, strerror(errno));

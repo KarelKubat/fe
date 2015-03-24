@@ -7,12 +7,8 @@ ssize_t write(int fd, const void *buf, size_t bytes) {
     void *crypted_buf;
     BitSequence hashval[HASH_BYTE_SIZE];
 
-    fe_msg(fectx(), "Request to write(%d, ..., %lu)\n",
-	   fd, (long unsigned)bytes);
-
     if (! real_write)
 	real_write = fe_dllookup("write");
-
     if (! fe_is_fd_target(fd))
 	return real_write(fd, buf, bytes);
 
@@ -21,6 +17,8 @@ ssize_t write(int fd, const void *buf, size_t bytes) {
     memcpy(crypted_buf, buf, bytes);
 
     /* Encrypt our copy and write it. Make sure transcryption rehashes. */
+    fe_msg(fectx(), "Request to write(%d, ..., %lu)\n",
+	   fd, (long unsigned)bytes);
     startoff = lseek(fd, 0, SEEK_CUR);
     *hashval = 0;
     fe_cryptbuf(crypted_buf, bytes, startoff, hashval);

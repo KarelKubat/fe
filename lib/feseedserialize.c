@@ -21,6 +21,10 @@ char *fe_seed_serialize(char const *buf) {
     BitSequence magichash[HASH_BYTE_SIZE];
     HashReturn r;
 
+    /* No seed? No output */
+    if (!buf)
+	return fe_xstrdup(buf);
+
     /* Get a hash of our own magic */
     if ( (r = fe_Hash(HASH_BIT_SIZE, (BitSequence const *)getmagic(),
 		      strlen(magic), magichash)) )

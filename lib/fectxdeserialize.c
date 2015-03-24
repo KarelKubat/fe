@@ -27,6 +27,14 @@ FeCtx *fectx_deserialize(char const *s) {
 	fe_error("Bad FE_CTX setting at %s\n", s);
     s++;
 
+    if (*s == '1')
+	ctx.ignore_noncaught = 1;
+    else if (*s == '0')
+	ctx.ignore_noncaught = 0;
+    else
+	fe_error("Bad FE_CTX setting at %s\n", s);
+    s++;
+
     sscanf(s, "%d", &ctx.ntargets);
     while (isdigit(*s))
 	s++;

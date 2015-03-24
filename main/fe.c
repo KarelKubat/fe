@@ -1,5 +1,9 @@
 #include "../fe.h"
 
+/* Local functions for the main program, undeclared in fe.h */
+extern void cryptfile(char const *f);
+extern void usage(void);
+
 int main(int argc, char **argv) {
     int opt, target_set = 0, i;
     char *file_to_crypt = 0, buffer[1024], *cp, *key = 0;
@@ -10,7 +14,7 @@ int main(int argc, char **argv) {
 	usage();
 
     /* Parse command line */
-    while ( (opt = getopt(argc, argv, "h?k:f:t:vs")) > -1 )
+    while ( (opt = getopt(argc, argv, "h?k:f:t:vsiV")) > -1 )
 	switch (opt) {
 	case 'h':
 	case '?':
@@ -22,7 +26,7 @@ int main(int argc, char **argv) {
 	    file_to_crypt = optarg;
 	    break;
 	case 't':
-	    target_add(&ctx, optarg);
+	    fe_target_add(&ctx, optarg);
 	    target_set++;
 	    break;
 	case 'v':
@@ -31,6 +35,12 @@ int main(int argc, char **argv) {
 	case 's':
 	    ctx.msg_dst = dst_stderr;
 	    break;
+	case 'i':
+	    ctx.ignore_noncaught = 1;
+	    break;
+	case 'V':
+	    printf(VER "\n");
+	    return 0;
 	}
 
     /* Get the crypto key unless given already */
@@ -38,13 +48,15 @@ int main(int argc, char **argv) {
 	key = getenv("FE_KEY");
     if (! key)
 	key = getpass("fe key: ");
-    randinit(&ctx, key);
+    ctx.seed = fe_xstrdup(key);
 
     /* Find targets, if not done so yet via flags -t */
     if (! target_set)
 	for (i = optind + 1; i < argc; i++)
-	    target_add(&ctx, argv[i]);
-    targets_msg(&ctx);
+	    fe_target_add(&ctx, argv[i]);
+    if (ctx.msg_verbosity)
+	for (i = 0; i < ctx.ntargets; i++)
+	    fe_msg(&ctx, "Transcryption target: %s\n", ctx.targets[i].name);
 
     /* Set FE environment */
     cp = fectx_serialize(&ctx);
@@ -83,7 +95,7 @@ int main(int argc, char **argv) {
 		strcat(buffer, " ");
 	}
 	fe_msg(&ctx, "About to run command: %s\n", buffer);
-	system(buffer);
+	return system(buffer);
     }
 
     return 0;
