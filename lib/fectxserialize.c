@@ -34,6 +34,9 @@ char *fectx_serialize(FeCtx const *ctx) {
     ret = fe_xstrcat(ret, fe_seed_serialize(ctx->seed));
 
     /* Done */
+#if 0
+    printf("Serialized fe context: %s\n", ret);
+#endif    
     return ret;
 }
 	
