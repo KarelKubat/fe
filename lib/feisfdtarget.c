@@ -10,8 +10,12 @@ int fe_is_fd_target(int fd) {
 	    fe_msg(fectx(), "Target fd %d of %s\n",
 		   fectx()->targets[i].fd, fectx()->targets[i].name);
     }
-#endif	
-	    
+#endif
+
+    /* Don't consider invalid fd's */
+    if (fd < 0)
+	return 0;
+
     /* Match in our target list */
     for (i = 0; i < fectx()->ntargets; i++)
 	if (fectx()->targets[i].fd == fd) {

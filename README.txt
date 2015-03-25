@@ -28,19 +28,6 @@ What good is that? There is a number of use cases:
   "mysecretfile.txt", then you can always use flag -t:
       fe -t mysecretfile  grep amazon mysecretfile.txt
 
-- Your favorite LAMP application uses a configuration file, say
-  /opt/app/etc/app.config. That file has sensitive information in it,
-  for example database connectivity usernames and passwords. You don't
-  want the file to be plain-text visible. But, your PHP app needs to
-  access it. To start up your app, you type:
-      fe -t /opt/app/etc/app.config  apachectl start
-  Again, all processes that are started by fe will perceive the
-  targeted configuration file as plaintext (so, apachectl, hence
-  httpd, hence mod_php that runs in Apache). Here by the way you need
-  to tell fe what the target file is; there's no way fe could guess
-  from "apachectl start" that "/opt/app/etc/app.config" is an
-  encryption target.
-
 - You want to start an entire new shell on top of fe's encryption
   layer, so that the encrypted file $HOME/etc/mysecretfile.txt appears
   unencrypted to all stacked processes, while in fact it's in

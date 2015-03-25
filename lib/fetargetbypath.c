@@ -4,10 +4,16 @@ void fe_target_by_path(char const *f, int newfd) {
     struct stat statbuf;
     int i;
     char *thisrealp, *targetrealp;
+    int org_errno;
+
+    /* Stack errno's */
+    org_errno = errno;
 
     /* Never mind non-regular files */
-    if (fstat(newfd, &statbuf) || !fe_isfile(&statbuf))
+    if (fstat(newfd, &statbuf) || !fe_isfile(&statbuf)) {
+	errno = org_errno;
 	return;
+    }
 
     /* Examine what we have */
     thisrealp = fe_xrealpath(f);
@@ -23,6 +29,8 @@ void fe_target_by_path(char const *f, int newfd) {
 	free(targetrealp);
     }
     free(thisrealp);
+
+    errno = org_errno;
 }
 
     
