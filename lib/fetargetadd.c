@@ -5,13 +5,16 @@
  */
 static char *emacsbuf(char *t) {
     char *ret = 0;
-    char *dn = dirname(t);
+    char *dn = fe_xdirname(t);
+    
     if (strcmp(dn, ".")) {
-	ret = fe_xstrdup(dn);
-	ret = fe_xstrcat(ret, "/");
-    }
+	dn = fe_xstrcat(dn, "/");
+	ret = dn;
+    } else
+	free(dn);
+    
     ret = fe_xstrcat(ret, ".#");
-    ret = fe_xstrcat(ret, fe_xstrdup(basename(t)));
+    ret = fe_xstrcat(ret, fe_xbasename(t));
     return ret;
 }
 
@@ -20,13 +23,16 @@ static char *emacsbuf(char *t) {
  */
 static char *vibuf(char *t) {
     char *ret = 0;
-    char *dn = dirname(t);
+    char *dn = fe_xdirname(t);
+    
     if (strcmp(dn, ".")) {
-	ret = fe_xstrdup(dn);
-	ret = fe_xstrcat(ret, "/");
-    }
+	dn = fe_xstrcat(ret, "/");
+	ret = dn;
+    } else
+	free(dn);
+    
     ret = fe_xstrcat(ret, ".");
-    ret = fe_xstrcat(ret, fe_xstrdup(basename(t)));
+    ret = fe_xstrcat(ret, fe_xbasename(t));
     ret = fe_xstrcat(ret, ".swp");
     return ret;
 }

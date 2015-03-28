@@ -92,6 +92,8 @@ extern void fe_target_add(FeCtx *ctx, char const *name);
 extern void fe_target_by_fd(int oldfd, int newfd);
 extern void fe_target_by_path(char const *name, int newfd);
 extern int fe_xasprintf(char **ret, const char *fmt, ...);
+extern char *fe_xdirname(char const *t);
+extern char *fe_xbasename(char const *t);
 extern void *fe_xmalloc(size_t sz);
 extern char *fe_xstrdup(char const *s);
 extern char *fe_xstrcat(char *mem, char const *s);
