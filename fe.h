@@ -9,6 +9,7 @@
 #ifdef HAVE_LIBIO_H_
 #include <libio.h>
 #endif
+#include <libgen.h>
 #include <pwd.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -17,6 +18,8 @@
 #include <syslog.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/uio.h>
@@ -53,6 +56,8 @@ typedef struct {
     Target *targets;
     /* Random generator related */
     char *seed;
+    /* Pass via environment or via shared memory? */
+    int use_env;
 } FeCtx;
 
 /* Check that MAGIC is defined, which should be kept in Makefile.local */
@@ -81,7 +86,8 @@ extern char fe_randbyte_keyed(char const *key, uint32_t x,
 extern char *fe_seed_deserialize(char const *buf);
 extern char *fe_seed_serialize(char const *buf);
 extern FeCtx *fe_setup(char const *key, int verbosity, MsgDst dst,
-		       int ignore_uncaught);
+		       int ignore_uncaught, int use_env);
+extern void *fe_shmat(int shmid);
 extern void fe_target_add(FeCtx *ctx, char const *name);
 extern void fe_target_by_fd(int oldfd, int newfd);
 extern void fe_target_by_path(char const *name, int newfd);
@@ -96,4 +102,6 @@ extern int fe_xvasprintf(char **ret, char const *fmt, va_list args);
 extern FeCtx *fectx (void);
 extern FeCtx *fectx_deserialize(char const *s);
 extern char *fectx_serialize(FeCtx const *ctx);
+extern void fectx_set(FeCtx const *ctx);
+extern void fectx_unset(void);
 

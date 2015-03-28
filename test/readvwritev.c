@@ -17,7 +17,7 @@ int main() {
     FeCtx *ctx;
     struct iovec *dst;
 
-    ctx = fe_setup("user secret", 1, dst_syslog, 1);
+    ctx = fe_setup("user secret", 1, dst_syslog, 1, 1);
     fe_target_add(ctx, fname);
 
     if ( (fd = open(fname, O_TRUNC | O_CREAT | O_WRONLY, 0644)) < 0 )

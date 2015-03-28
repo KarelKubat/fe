@@ -32,6 +32,10 @@ The shared object functions inspect the context. The user secret
 therefore also has to appear in the context, but it's there in an
 encrypted form (using the built-in magic, see INSTALL.txt).
 
+The context is actually either a serialized string where all necessary
+info is kept, or an integer that points to a shared memory block where
+this info is stored. This is controlled by fe's flag -e.
+
 Transcryption
 -------------
 
@@ -41,9 +45,10 @@ associated file is a target.
 
 Data transcryption is a simple XOR operation with a stream of
 pseudorandom bytes. The generation of the pseudorandom stream must of
-course be repeatable and depends only on the offset in the file,
-meaning that each n'th byte in a file must be XOR-ed with the same
-pseudorandom value in order to encrypt or decrypt it.
+course be repeatable and depends only on the user-supplied secret
+passphrase and on offset in the file, meaning that each n'th byte in a
+file must be XOR-ed with the same pseudorandom value in order to
+encrypt or decrypt it.
 
 The generation of pseudorandom bytes occurs in blocks of 1024 bits at
 a time using Skein hashing. The input for the hash function is the

@@ -1,7 +1,10 @@
 # Versioning:
 # [KK 2015-03-23] 1.00 Initial
 # [KK 2015-03-24] 1.01 Flags -i and -v, FE_CTX changed due to -i
-VER     = 1.01
+# [KK 2015-03-26] 1.02 Implemented shared memory, flag -e
+# [KK 2015-03-28] 1.03 Temp buffer files for emacs and vi added. For every
+#		       file.txt, targets .#file.txt and .file.txt.swp are used
+VER     = 1.03
 
 # Target paths
 BINDIR  = /usr/local/bin
@@ -11,7 +14,7 @@ LIBDIR  = /usr/local/lib
 FE      = fe
 LIB     = $(shell etc/c-conf -c c-conf.cache so-name $(FE))
 OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
-OPTFLAG = -g
+# OPTFLAG = -g
 
 # Dist archive
 TAR     = /tmp/fe-$(VER).tar.gz
@@ -47,6 +50,11 @@ install:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
 	  USYS=$(USYS) OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" \
 	  make -C main install
+	@if [ "$(OPTFLAG)" = "-g" ] ; then \
+	    echo; \
+	    echo "WARNING: Compiled with debugging symbols"; \
+	    echo "WARNING: Edit Makefile and recompile for production"; \
+	 fi
 
 clean:
 	LIB=$(LIB) FE=$(FE) make -C lib clean

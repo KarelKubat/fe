@@ -5,8 +5,8 @@ extern void cryptfile(char const *f);
 extern void usage(void);
 
 int main(int argc, char **argv) {
-    int opt, target_set = 0, i;
-    char *file_to_crypt = 0, buffer[1024], *cp, *key = 0;
+    int opt, target_set = 0, i, ret = 0;
+    char *file_to_crypt = 0, buffer[1024], *key = 0;
     static FeCtx ctx;
 
     /* Catchall usage info */
@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 	usage();
 
     /* Parse command line */
-    while ( (opt = getopt(argc, argv, "h?k:f:t:vsiV")) > -1 )
+    while ( (opt = getopt(argc, argv, "h?k:f:t:vsiVe")) > -1 )
 	switch (opt) {
 	case 'h':
 	case '?':
@@ -41,6 +41,9 @@ int main(int argc, char **argv) {
 	case 'V':
 	    printf(VER "\n");
 	    return 0;
+	case 'e':
+	    ctx.use_env = 1;
+	    break;
 	}
 
     /* Get the crypto key unless given already */
@@ -59,9 +62,8 @@ int main(int argc, char **argv) {
 	    fe_msg(&ctx, "Transcryption target: %s\n", ctx.targets[i].name);
 
     /* Set FE environment */
-    cp = fectx_serialize(&ctx);
-    fe_msg(&ctx, "Serialized context: %s\n", cp);
-    setenv("FE_CTX", cp, 1);
+    fectx_set(&ctx);
+    atexit(fectx_unset);
 
     if (file_to_crypt) {
 	if (optind != argc)
@@ -95,9 +97,9 @@ int main(int argc, char **argv) {
 		strcat(buffer, " ");
 	}
 	fe_msg(&ctx, "About to run command: %s\n", buffer);
-	return system(buffer);
+	ret = system(buffer);
     }
 
-    return 0;
+    return ret;
 }
 	       

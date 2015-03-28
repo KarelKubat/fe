@@ -16,7 +16,7 @@ FeCtx *fectx_deserialize(char const *s) {
     else if (*s == '0')
 	ctx.msg_verbosity = 0;
     else
-	fe_error("Bad FE_CTX setting at %s\n", s);
+	fe_error("Bad context setting at %s\n", s);
     s++;
 
     if (*s == 'l')
@@ -24,7 +24,7 @@ FeCtx *fectx_deserialize(char const *s) {
     else if (*s == 'e')
 	ctx.msg_dst = dst_stderr;
     else
-	fe_error("Bad FE_CTX setting at %s\n", s);
+	fe_error("Bad context setting at %s\n", s);
     s++;
 
     if (*s == '1')
@@ -32,7 +32,7 @@ FeCtx *fectx_deserialize(char const *s) {
     else if (*s == '0')
 	ctx.ignore_noncaught = 0;
     else
-	fe_error("Bad FE_CTX setting at %s\n", s);
+	fe_error("Bad context setting at %s\n", s);
     s++;
 
     sscanf(s, "%d", &ctx.ntargets);
