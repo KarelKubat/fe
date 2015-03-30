@@ -6,7 +6,7 @@ extern void usage(void);
 
 int main(int argc, char **argv) {
     int opt, target_set = 0, i, ret = 0;
-    char *file_to_crypt = 0, buffer[1024], *key = 0;
+    char *file_to_crypt = 0, buffer[1024], *key = 0, *key_again;
     static FeCtx ctx;
 
     /* Catchall usage info */
@@ -49,8 +49,18 @@ int main(int argc, char **argv) {
     /* Get the crypto key unless given already */
     if (! key)
 	key = getenv("FE_KEY");
-    if (! key)
-	key = getpass("fe key: ");
+    if (! key) {
+	key = getpass("fe key : ");
+	if (isatty(0)) {
+	    key = fe_xstrdup(key);
+	    key_again  = getpass("again  : ");
+	    if (strcmp(key, key_again))
+		fe_error("Key entry mismatch\n");
+	}
+    }
+    if (! *key)
+	fe_error("Empty key\n");
+	    
     ctx.seed = fe_xstrdup(key);
 
     /* Find targets, if not done so yet via flags -t */

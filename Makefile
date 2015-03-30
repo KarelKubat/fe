@@ -4,7 +4,9 @@
 # [KK 2015-03-26] 1.02 Implemented shared memory, flag -e
 # [KK 2015-03-28] 1.03 Temp buffer files for emacs and vi added. For every
 #		       file.txt, targets .#file.txt and .file.txt.swp are used
-VER     = 1.03
+# [KK 2015-03-30] 1.04 Key is reprompted in interactive mode. Interactively
+#		       entered empty keys rejected.
+VER     = 1.04
 
 # Target paths
 BINDIR  = /usr/local/bin
