@@ -1,12 +1,29 @@
 #include "../fe.h"
 
+#define BLOCKSIZE 102400
+
 void cryptfile(char const *f) {
-    int fd;
-    char buf[102400];
+    int fd, i, j;
+    char buf[BLOCKSIZE];
     size_t offset;
     BitSequence hashval[HASH_BYTE_SIZE];
+    off_t totread = 0;
+    struct stat statbuf;
+
+    /* Ignore signals that we can ignore; since cryptfile() is the
+     * only action that the program will take (see fe.c). We don't want to
+     * stop while transcrypting a file.
+     */
+    signal(SIGHUP,  SIG_IGN);
+    signal(SIGINT,  SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGPIPE, SIG_IGN);
+    signal(SIGTERM, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
 
     /* Open or croak */
+    if (stat(f, &statbuf))
+	fe_error("Cannot stat file %s: %s\n", f, strerror(errno));
     if ( (fd = open(f, O_RDWR)) < 0 )
 	fe_error("Cannot open file %s: %s\n", f, strerror(errno));
 
@@ -26,6 +43,25 @@ void cryptfile(char const *f) {
 	    break;
 	if (nread < 0)
 	    fe_error("Read error on file %s: %s\n", f, strerror(errno));
+	totread += nread;
+
+	/* Update progress meter */
+#if 0	
+	{
+	    int ndots = (int) (50 * totread / statbuf.st_size);
+	    printf("read %ld of total %ld, dots=%d\n",
+		   (long)totread, (long)statbuf.st_size, ndots);
+	}
+#endif
+	if (isatty(1)) {
+	    printf("\r[");
+	    for (i = 0; i < (75 * totread / statbuf.st_size); i++)
+		putchar('.');
+	    for (j = i; j < 75; j++)
+		putchar(' ');
+	    putchar(']');
+	    fflush(stdout);
+	}
 
 	/* Encrypt */
 	fe_cryptbuf(buf, nread, offset, hashval);
@@ -43,6 +79,7 @@ void cryptfile(char const *f) {
 		  "only %d bytes written instead of %d\n",
 		  f, (int)nwritten, (int)nread);
     }
+    putchar('\n');
     
     if (close(fd) < 0)
 	fe_error("Close error on file %s: %s\n", f, strerror(errno));

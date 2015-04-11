@@ -90,7 +90,7 @@ given to fe in any of three ways:
   Furthermore, on Linux, user "root" can access the environments of
   running programs via /proc.
   
-- Using none of the above. In that case fe will prompt for the key.
+- Using none of the above. In that case fe will prompt twice for the key.
   This option is the safest. 
 
 Don't loose your key
@@ -117,10 +117,15 @@ If you have plaintext files and want to encrypt them for usage with
 fe, then there are basically two options:
 
 1. Use fe's flag -f, as in:
-     fe -t plaintext.txt
+     fe -f plaintext.txt
      mv plaintext.txt encrypted.txt
+   In this case, the file is transcrypted "in-place" and you get a
+   nice progress meter showing how far fe is. Most stop-signals, like
+   pressing ^C, are ignored (else you might wind up with a
+   half-transcrypted file).
 
 2. Have a standard utility like "cp" do it for you, whilst instructing
    fe that the output file is a transcryption target:
      fe -t encrypted.txt  cp plaintext.txt encrypted.txt
      rm plaintext.txt
+

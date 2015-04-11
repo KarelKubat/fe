@@ -5,7 +5,9 @@
 # [KK 2015-03-28] 1.03 Temp buffer files for emacs and vi added. For every
 #		       file.txt, targets .#file.txt and .file.txt.swp are used
 # [KK 2015-03-30] 1.04 Key is reprompted in interactive mode. Interactively
-#		       entered empty keys rejected.
+#		       entered zero-length keys are rejected. Progress meter
+#		       added during -f transcryption. Many stop-signals are
+#		       now ignored while transcrypting a file.
 VER     = 1.04
 
 # Target paths

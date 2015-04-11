@@ -11,6 +11,7 @@
 #endif
 #include <libgen.h>
 #include <pwd.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdlib.h>

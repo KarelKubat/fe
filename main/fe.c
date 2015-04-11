@@ -6,7 +6,7 @@ extern void usage(void);
 
 int main(int argc, char **argv) {
     int opt, target_set = 0, i, ret = 0;
-    char *file_to_crypt = 0, buffer[1024], *key = 0, *key_again;
+    char *file_to_crypt = 0, buffer[1024], *key = 0, *key_again, *cp;
     static FeCtx ctx;
 
     /* Catchall usage info */
@@ -50,13 +50,18 @@ int main(int argc, char **argv) {
     if (! key)
 	key = getenv("FE_KEY");
     if (! key) {
-	key = getpass("fe key : ");
 	if (isatty(0)) {
-	    key = fe_xstrdup(key);
-	    key_again  = getpass("again  : ");
+	    key = fe_xstrdup(getpass("fe key : "));
+	    key_again      = getpass("again  : ");
 	    if (strcmp(key, key_again))
 		fe_error("Key entry mismatch\n");
+	} else {
+	    fgets(buffer, sizeof(buffer) - 1, stdin);
+	    if ( (cp = strchr(buffer, '\n')) )
+		*cp = 0;
+	    key = fe_xstrdup(buffer);
 	}
+	    
     }
     if (! *key)
 	fe_error("Empty key\n");
