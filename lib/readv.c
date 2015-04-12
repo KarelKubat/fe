@@ -13,7 +13,7 @@ ssize_t readv(int fd, const struct iovec *iov, int iovcnt) {
 	return real_readv(fd, iov, iovcnt);
 
     /* Read buffers and transcrypt them. Make sure transcryption rehashes. */
-    fe_msg(fectx(), "Request to readv(%d, ..., %d)\n", fd, iovcnt);
+    fe_msg(fectx(), "Request to readv(%d, iov, %d)\n", fd, iovcnt);
     startoff = lseek(fd, 0, SEEK_SET);
     ret = real_readv(fd, iov, iovcnt);
     *hashval = 0;

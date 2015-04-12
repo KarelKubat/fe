@@ -7,7 +7,9 @@
 # [KK 2015-03-30] 1.04 Key is reprompted in interactive mode. Interactively
 #		       entered zero-length keys are rejected. Progress meter
 #		       added during -f transcryption. Many stop-signals are
-#		       now ignored while transcrypting a file.
+#		       now ignored while transcrypting a file. Support for
+#		       fprintf() added (though fscanf() is impossible) plus
+#		       fgetc(), fgets(), fputc(), fputs() etc.
 VER     = 1.04
 
 # Target paths

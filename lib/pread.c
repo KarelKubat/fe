@@ -11,7 +11,7 @@ ssize_t pread(int fd, void *buf, size_t bytes, off_t offset) {
 	return real_pread(fd, buf, bytes, offset);
 
     /* Fetch buffer and transcrypt it. Make sure transcryption rehashes. */
-    fe_msg(fectx(), "Request to pread(%d, ..., %lu, %ld)\n",
+    fe_msg(fectx(), "Request to pread(%d, buf, %lu, %ld)\n",
 	   fd, (long unsigned) bytes, (long)offset);
     ret = real_pread(fd, buf, bytes, offset);
     *hashval = 0;

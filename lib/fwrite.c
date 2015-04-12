@@ -13,18 +13,19 @@ size_t fwrite(void const *buf, size_t sz, size_t items, FILE *f) {
     if (! (fe_is_fd_target(fileno(f))) )
 	return real_fwrite(buf, sz, items, f);
 
-    fe_msg(fectx(), "Request to fwrite(..., %ld, %ld, fd=%d)\n",
-	   (long)sz, (long)items, fileno(f));
-
     /* Get a copy of the buffer */
     crypted_buf = fe_xmalloc(sz * items);
     memcpy(crypted_buf, buf, sz * items);
 
     /* Encrypt our copy and write it. Make sure transcryption rehashes. */
-    startoff = (off_t)ftell(f);
+    startoff = ftell(f);
     *hashval = 0;
     fe_cryptbuf(crypted_buf, sz * items, startoff, hashval);
     ret = real_fwrite(crypted_buf, sz, items, f);
+    fe_msg(fectx(), "Request to fwrite(buf, %ld, %ld, fd=%d) "
+	   "from offset %lu => %lu\n",
+	   (long)sz, (long)items, fileno(f), (long)startoff, ret);
+
 
     /* Cleanup */
     free(crypted_buf);

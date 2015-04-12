@@ -16,7 +16,7 @@ void usage(void) {
 "  -e        Uses the environment to pass context to next programs,\n"
 "            default: shared memory\n"
 "  -i        Ignores non-caught calls such as fscanf instead of aborting.\n"
-"            With -i, fprintf/fscanf will not transcrypt but will work.\n"
+"            With -i, fscanf etc. will not transcrypt but will work.\n"
 "  -k KEY    Initializes the crypto functions with the stated key. When this\n"
 "            flag is absent, the FE_KEY environment variable is used. When\n"
 "            neither -k is given nor FE_KEY is present, the key is read from\n"

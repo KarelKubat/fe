@@ -16,7 +16,7 @@ int main() {
 	perror("/tmp/bufferedio.txt");
 
     printf("Writing using fwrite...\n");
-    fwrite(writebuf, sizeof(writebuf), 1, f);
+    fwrite(writebuf, 1, sizeof(writebuf), f);
 
     printf("Closing using fclose...\n");
     fclose(f);
@@ -25,7 +25,7 @@ int main() {
     if (! (f = fopen("/tmp/bufferedio.txt", "r")) )
 	perror("/tmp/bufferedio.txt");
 
-    fread(readbuf, sizeof(readbuf), 1, f);
+    fread(readbuf, 1, sizeof(readbuf), f);
 
     if (strcmp(writebuf, readbuf))
 	fe_error("Buffer mismatch, expected: [%s]\n"

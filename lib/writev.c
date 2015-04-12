@@ -13,7 +13,7 @@ ssize_t writev(int fd, const struct iovec *iovec, int iovcnt) {
     if (! fe_is_fd_target(fd))
 	return real_writev(fd, iovec, iovcnt);
 
-    fe_msg(fectx(), "Request to writev(%d, ..., %d)\n", fd, iovcnt);
+    fe_msg(fectx(), "Request to writev(%d, iov, %d)\n", fd, iovcnt);
 
     /* Remember the offset. Used to key all iovec buffer transcrypts. */    
     startoff = lseek(fd, 0, SEEK_SET);

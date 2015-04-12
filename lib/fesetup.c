@@ -11,8 +11,6 @@ FeCtx *fe_setup(char const *key, int verbosity, MsgDst dst,
     ctx.msg_dst = dst;
     ctx.ignore_noncaught = ignore_uncaught;
     ctx.use_env = use_env;
-    
-    printf("use env: %d\n", use_env);
 
     fectx_set(&ctx);
 

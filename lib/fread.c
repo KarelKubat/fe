@@ -11,13 +11,13 @@ size_t fread(void *buf, size_t sz, size_t items, FILE *f) {
     if (! fe_is_fd_target(fileno(f)) )
 	return real_fread(buf, sz, items, f);
 
-    fe_msg(fectx(), "Request to fread(..., %ld, %ld, fd=%d)\n",
-	   (long)sz, (long)items, fileno(f));
-
     startoff = (off_t)ftell(f);
     *hashval = 0;
     ret = real_fread(buf, sz, items, f);
-    fe_cryptbuf(buf, sz * items, startoff, hashval);
+    fe_msg(fectx(), "Request to fread(buf, %ld, %ld, fd=%d) "
+	   "from offset %lu => %lu\n",
+	   (long)sz, (long)items, fileno(f), (long)startoff, ret);
+    fe_cryptbuf(buf, sz * ret, startoff, hashval);
 
     return ret;
 }
