@@ -24,8 +24,7 @@ size_t fwrite(void const *buf, size_t sz, size_t items, FILE *f) {
     ret = real_fwrite(crypted_buf, sz, items, f);
     fe_msg(fectx(), "Request to fwrite(buf, %ld, %ld, fd=%d) "
 	   "from offset %lu => %lu\n",
-	   (long)sz, (long)items, fileno(f), (long)startoff, ret);
-
+	   (long)sz, (long)items, fileno(f), (long)startoff, (long)ret);
 
     /* Cleanup */
     free(crypted_buf);

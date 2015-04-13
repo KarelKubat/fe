@@ -16,7 +16,7 @@ size_t fread(void *buf, size_t sz, size_t items, FILE *f) {
     ret = real_fread(buf, sz, items, f);
     fe_msg(fectx(), "Request to fread(buf, %ld, %ld, fd=%d) "
 	   "from offset %lu => %lu\n",
-	   (long)sz, (long)items, fileno(f), (long)startoff, ret);
+	   (long)sz, (long)items, fileno(f), (long)startoff, (long)ret);
     fe_cryptbuf(buf, sz * ret, startoff, hashval);
 
     return ret;
