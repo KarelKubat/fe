@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 size_t fwrite(void const *buf, size_t sz, size_t items, FILE *f) {
     static size_t (*real_fwrite)(void const *buf, size_t sz,

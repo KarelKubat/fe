@@ -1,4 +1,4 @@
-C = $(wildcard *.c)
+C = $(wildcard *.c libc/*.c)
 O = $(patsubst %.c, %.o, $(C))
 
 foo: $(LIB)
@@ -20,7 +20,7 @@ $(LIB): $(O)
 	      -DHAVE_LIBIO=$(shell ../etc/c-conf -c ../c-conf.cache \
 			     ifheader libio.h HAVE_LIBIO_H_) \
 	      -DMAGIC=\"$(MAGIC)\" -DLIBDIR=\"$(LIBDIR)\" \
-	      -DBINDIR=\"$(BINDIR)\" $(OPTFLAG) $<
+	      -DBINDIR=\"$(BINDIR)\" $(OPTFLAG) -o $@ $<
 
 skein.o: skein.c
 	$(CC) -c $<

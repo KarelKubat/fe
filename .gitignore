@@ -1,4 +1,5 @@
 lib/*.o
+lib/libc/*.o
 lib/libfe.dylib
 lib/libfe.so
 lib/magic.h

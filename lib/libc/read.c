@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 ssize_t read(int fd, void *buf, size_t bytes) {
     static ssize_t (*real_read)(int fd, void *buf, size_t bytes);

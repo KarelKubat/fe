@@ -59,6 +59,9 @@ typedef struct {
     char *seed;
     /* Pass via environment or via shared memory? */
     int use_env;
+    /* Debugging: fe won't transcrypt, but will pass through all caught
+     * libc functions */
+    int debug;
 } FeCtx;
 
 /* Check that MAGIC is defined, which should be kept in Makefile.local */
@@ -87,7 +90,7 @@ extern char fe_randbyte_keyed(char const *key, uint32_t x,
 extern char *fe_seed_deserialize(char const *buf);
 extern char *fe_seed_serialize(char const *buf);
 extern FeCtx *fe_setup(char const *key, int verbosity, MsgDst dst,
-		       int ignore_uncaught, int use_env);
+		       int ignore_uncaught, int use_env, int debug);
 extern void *fe_shmat(int shmid);
 extern void fe_target_add(FeCtx *ctx, char const *name);
 extern void fe_target_by_fd(int oldfd, int newfd);

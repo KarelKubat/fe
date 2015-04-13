@@ -24,7 +24,7 @@ EOF
 $ENV{FE_KEY} = 'lorem';
 
 print("Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver\n");
-run("fe -t /tmp/$$ cp reference/lorem.txt /tmp/$$");
+run("fe -vt /tmp/$$ cp reference/lorem.txt /tmp/$$");
 print("Comparing /tmp/$$ with pre-existing reference/lorem-$ver.txt\n");
 run("diff /tmp/$$ reference/lorem-$ver.txt");
 

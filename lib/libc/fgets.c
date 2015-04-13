@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 char *fgets(char *buf, int sz, FILE *f) {
     static char* (*real_fgets)(char *buf, int sz, FILE *f);

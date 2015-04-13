@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 int fgetc(FILE *f) {
     static int (*real_fgetc)(FILE *f);

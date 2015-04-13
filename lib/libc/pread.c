@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 ssize_t pread(int fd, void *buf, size_t bytes, off_t offset) {
     static ssize_t (*real_pread)(int fd, void *buf, size_t bytes, off_t offset);

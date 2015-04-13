@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 FILE *fopen(char const *path, char const *mode) {
     FILE *f;

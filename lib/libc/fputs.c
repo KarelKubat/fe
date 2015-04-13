@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 int fputs(char const *s, FILE *f) {
     static int (*real_fputs)(char const *s, FILE *f);

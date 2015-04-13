@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 int fscanf(FILE *f, char const *fmt, ...) {
     va_list args;

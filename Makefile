@@ -9,7 +9,8 @@
 #		       added during -f transcryption. Many stop-signals are
 #		       now ignored while transcrypting a file. Support for
 #		       fprintf() added (though fscanf() is impossible) plus
-#		       fgetc(), fgets(), fputc(), fputs() etc.
+#		       fgetc(), fgets(), fputc(), fputs() etc. Flag -d added
+#		       with ctx.debug setting.
 VER     = 1.04
 
 # Target paths

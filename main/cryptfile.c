@@ -10,17 +10,6 @@ void cryptfile(char const *f) {
     off_t totread = 0;
     struct stat statbuf;
 
-    /* Ignore signals that we can ignore; since cryptfile() is the
-     * only action that the program will take (see fe.c). We don't want to
-     * stop while transcrypting a file.
-     */
-    signal(SIGHUP,  SIG_IGN);
-    signal(SIGINT,  SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
-    signal(SIGPIPE, SIG_IGN);
-    signal(SIGTERM, SIG_IGN);
-    signal(SIGTSTP, SIG_IGN);
-
     /* Open or croak */
     if (stat(f, &statbuf))
 	fe_error("Cannot stat file %s: %s\n", f, strerror(errno));

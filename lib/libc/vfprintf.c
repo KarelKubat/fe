@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 int vfprintf(FILE *f, char const *fmt, va_list args) {
     static int (*real_vfprintf)(FILE *f, char const *fmt, va_list args);

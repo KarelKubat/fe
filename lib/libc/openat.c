@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 int openat(int fd, char const *path, int oflag, ...) {
     fe_msg(fectx(), "Request to openat(%d, %s, %d, ...\n", fd, path, oflag);    

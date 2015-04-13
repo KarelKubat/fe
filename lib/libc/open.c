@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 int open(char const *path, int oflag, ...) {
     static int (*real_open)(char const *path, int oflag, ...);

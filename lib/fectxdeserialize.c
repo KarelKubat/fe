@@ -35,6 +35,15 @@ FeCtx *fectx_deserialize(char const *s) {
 	fe_error("Bad context setting at %s\n", s);
     s++;
 
+    if (*s == '1')
+	ctx.debug = 1;
+    else if (*s == '0')
+	ctx.debug = 0;
+    else
+	fe_error("Bad context setting at %s\n", s);
+    s++;
+
+
     sscanf(s, "%d", &ctx.ntargets);
     while (isdigit(*s))
 	s++;

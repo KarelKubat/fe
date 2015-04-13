@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 int close(int fd) {
     static int (*real_close)(int fd);

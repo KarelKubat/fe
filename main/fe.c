@@ -2,11 +2,12 @@
 
 /* Local functions for the main program, undeclared in fe.h */
 extern void cryptfile(char const *f);
+extern char *quoted(char const *s);
 extern void usage(void);
 
 int main(int argc, char **argv) {
     int opt, target_set = 0, i, ret = 0;
-    char *file_to_crypt = 0, buffer[1024], *key = 0, *key_again, *cp;
+    char *file_to_crypt = 0, buffer[1024], *sysbuf, *key = 0, *key_again, *cp;
     static FeCtx ctx;
 
     /* Catchall usage info */
@@ -14,7 +15,7 @@ int main(int argc, char **argv) {
 	usage();
 
     /* Parse command line */
-    while ( (opt = getopt(argc, argv, "h?k:f:t:vsiVe")) > -1 )
+    while ( (opt = getopt(argc, argv, "h?k:f:t:vsiVed")) > -1 )
 	switch (opt) {
 	case 'h':
 	case '?':
@@ -30,7 +31,7 @@ int main(int argc, char **argv) {
 	    target_set++;
 	    break;
 	case 'v':
-	    ctx.msg_verbosity++;
+	    ctx.msg_verbosity = 1;
 	    break;
 	case 's':
 	    ctx.msg_dst = dst_stderr;
@@ -44,9 +45,17 @@ int main(int argc, char **argv) {
 	case 'e':
 	    ctx.use_env = 1;
 	    break;
+	case 'd':
+	    ctx.debug = 1;
+	    ctx.msg_verbosity = 1;
+	    break;
 	}
 
-    /* Get the crypto key unless given already */
+    /* When not in debug mode: get the crypto key unless given already.
+     * Debug key is set to an arbitrary string, it won't be used anywhere,
+     * see fe_cryptbuf() */
+    if (ctx.debug)
+	key = "debug key";
     if (! key)
 	key = getenv("FE_KEY");
     if (! key) {
@@ -80,6 +89,16 @@ int main(int argc, char **argv) {
     fectx_set(&ctx);
     atexit(fectx_unset);
 
+    /* Ignore signals that we can ignore, we don't want to stop while
+     * transcrypting.
+     */
+    signal(SIGHUP,  SIG_IGN);
+    signal(SIGINT,  SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGPIPE, SIG_IGN);
+    signal(SIGTERM, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
+
     if (file_to_crypt) {
 	if (optind != argc)
 	    fe_error("No command and arguments accepted with flag -f\n");
@@ -102,17 +121,18 @@ int main(int argc, char **argv) {
 #endif
 
 	/* Run the intended command */
-	buffer[0] = 0;
+	sysbuf = 0;
 	for (i = optind; i < argc; i++) {
-	    if (strlen(buffer) + strlen(argv[i]) + 1 >= sizeof(buffer))
-		fe_error("Command too long, exceeds %d bytes\n",
-		      (int)sizeof(buffer));
-	    strcat(buffer, argv[i]);
+	    char *q = quoted(argv[i]);
+	    sysbuf = fe_xstrcat(sysbuf, q);
 	    if (i < argc - 1)
-		strcat(buffer, " ");
+		sysbuf = fe_xstrcat(sysbuf, " ");
 	}
-	fe_msg(&ctx, "About to run command: %s\n", buffer);
-	ret = system(buffer);
+	fe_msg(&ctx, "About to run command: %s\n", sysbuf);
+	if ( (ret = system(sysbuf)) == -1 )
+	    fe_error("Failed to run command: cannot fork\n");
+	else if (ret == 127)
+	    fe_error("Failed to run command: shell failure\n");
     }
 
     return ret;

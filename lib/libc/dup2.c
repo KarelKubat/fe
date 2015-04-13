@@ -1,4 +1,4 @@
-#include "../fe.h"
+#include "../../fe.h"
 
 int dup2(int fd1, int fd2) {
     static int (*real_dup2)(int fd1, int fd2);
