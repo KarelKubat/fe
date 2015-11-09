@@ -6,6 +6,9 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#ifdef HAVE_GETOPT_H
+#include <getopt.h>
+#endif
 #ifdef HAVE_LIBIO_H_
 #include <libio.h>
 #endif
@@ -18,6 +21,7 @@
 #include <stdio.h>
 #include <syslog.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -110,4 +114,3 @@ extern FeCtx *fectx_deserialize(char const *s);
 extern char *fectx_serialize(FeCtx const *ctx);
 extern void fectx_set(FeCtx const *ctx);
 extern void fectx_unset(void);
-

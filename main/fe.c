@@ -10,12 +10,27 @@ int main(int argc, char **argv) {
     char *file_to_crypt = 0, buffer[1024], *sysbuf, *key = 0, *key_again, *cp;
     static FeCtx ctx;
 
+    /* Long options to parse from the cmd line */
+    static struct option longopts[] = {
+	{ "help",             no_argument,       0, 'h' },
+	{ "key",              required_argument, 0, 'k' },
+	{ "stderr-log",       no_argument,       0, 's' },
+	{ "environment",      no_argument,       0, 'e' },
+	{ "ignore-uncaught",  no_argument,       0, 'i' },
+	{ "debug",            no_argument,       0, 'd' },
+	{ "target",           required_argument, 0, 't' },
+	{ "file",             required_argument, 0, 'f' },
+	{ "version",          no_argument,       0, 'V' },
+	{ 0,		      0,		 0, 0   }
+    };
+
     /* Catchall usage info */
     if (argc == 1)
 	usage();
 
     /* Parse command line */
-    while ( (opt = getopt(argc, argv, "h?k:f:t:vsiVed")) > -1 )
+    while ( (opt = getopt_long(argc, argv, "h?k:f:t:vsiVed",
+			       longopts, 0)) > -1 )
 	switch (opt) {
 	case 'h':
 	case '?':
@@ -23,32 +38,32 @@ int main(int argc, char **argv) {
 	case 'k':
 	    key = optarg;
 	    break;
-	case 'f':
-	    file_to_crypt = optarg;
-	    break;
-	case 't':
-	    fe_target_add(&ctx, optarg);
-	    target_set++;
-	    break;
-	case 'v':
-	    ctx.msg_verbosity = 1;
-	    break;
 	case 's':
 	    ctx.msg_dst = dst_stderr;
 	    break;
-	case 'i':
-	    ctx.ignore_noncaught = 1;
-	    break;
-	case 'V':
-	    printf(VER "\n");
-	    return 0;
 	case 'e':
 	    ctx.use_env = 1;
+	    break;
+	case 'i':
+	    ctx.ignore_noncaught = 1;
 	    break;
 	case 'd':
 	    ctx.debug = 1;
 	    ctx.msg_verbosity = 1;
 	    break;
+	case 't':
+	    fe_target_add(&ctx, optarg);
+	    target_set++;
+	    break;
+	case 'f':
+	    file_to_crypt = optarg;
+	    break;
+	case 'v':
+	    ctx.msg_verbosity = 1;
+	    break;
+	case 'V':
+	    printf(VER "\n");
+	    return 0;
 	}
 
     /* When not in debug mode: get the crypto key unless given already.

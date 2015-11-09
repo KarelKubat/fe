@@ -73,3 +73,18 @@ in either of two ways:
   plaintext information being committed to disk.
 The behavior is controlled using flag -i.
 
+Porting
+-------
+
+This source tree is suitable for builds on Linux and on Darwin. If you
+want to port fe to a different Unix flavor, then proceed as follows:
+1. Edit the top level Makefile and make sure that USYS gets set
+   appropriately given the output of your standard "uname" command.
+2. Edit main/fe.c and make sure that the new value of USYS is
+   interpreted to set the necessary environment variables for dynamic
+   library injection.
+3. Send me the diffs and your contribution will be in the next
+   release.
+If you are unclear as to the what and why, don't hesitate to contact
+me. I may not have access to your flavor of Unix, but I can probably
+point out where things go wrong when they do.

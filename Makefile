@@ -11,7 +11,10 @@
 #		       fprintf() added (though fscanf() is impossible) plus
 #		       fgetc(), fgets(), fputc(), fputs() etc. Flag -d added
 #		       with ctx.debug setting.
-VER     = 1.04
+# [KK 2015-11-09] 1.05 Added long options --target etc. Adjusted usage info.
+#		       Added a Porting section to TECHINFO.txt. Progress bar
+#		       during "fe -f ..." shows the ETA in secs.
+VER     = 1.05
 
 # Target paths
 BINDIR  = /usr/local/bin

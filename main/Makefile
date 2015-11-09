@@ -12,6 +12,8 @@ $(LIBAR): $(O)
 
 %.o: %.c
 	$(CC) -c $(OPTFLAG) -DLIB=\"$(LIB)\" -DVER=\"$(VER)\" -Wall -Werror \
+	      $(shell ../etc/c-conf -c ../c-conf.cache \
+		      ifheader getopt.h HAVE_GETOPT_H) \
               -DLIBDIR=\"$(LIBDIR)\" -DBINDIR=\"$(BINDIR)\" \
 	      -DMAGIC=\"$(MAGIC)\" -DUSYS=$(USYS) $<
 
