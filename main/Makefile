@@ -3,8 +3,9 @@ O     = $(patsubst %.c, %.o, $(C))
 AR    = local
 LIBAR = liblocal.a
 
+# Executable
 fe: $(LIBAR) ../lib/$(LIB)
-	$(CC) -o fe -L. -l$(AR) -L../lib -l$(FE) \
+	$(CC) -o fe $(OPTFLAG) -L. -l$(AR) -L../lib -l$(FE) \
 	      $(shell ../etc/c-conf -c ../c-conf.cache lib dl)
 
 $(LIBAR): $(O)

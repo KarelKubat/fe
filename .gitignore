@@ -8,3 +8,4 @@ main/*.o
 main/lib*.a
 test/*.t
 c-conf.cache
+Makefile.local

@@ -131,7 +131,9 @@ int main(int argc, char **argv, char **envp) {
 	/* Going to launch the command with the shared object underneath */
 	
 #if USYS == UN_DARWIN
-	/* For MacOSX: */
+	/* For MacOSX: This unfortunately works only for selected programs.
+	 * E.g. stuff from /usr/local/bin/ will obey loaded libs. but standard
+	 * /usr/bin and /bin (such as cp) will happily ignore. */
 	setenv("DYLD_INSERT_LIBRARIES", LIBDIR "/" LIB, 1);
 	setenv("DYLD_FORCE_FLAT_NAMESPACE", "1", 1);
 #elif USYS == UN_LINUX

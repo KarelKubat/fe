@@ -26,7 +26,7 @@ LIBDIR  = /usr/local/lib
 FE      = fe
 LIB     = $(shell etc/c-conf -c c-conf.cache so-name $(FE))
 OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
-# OPTFLAG = -g
+OPTFLAG = "-g -pg"
 
 # Dist archive
 TAR     = /tmp/fe-$(VER).tar.gz
