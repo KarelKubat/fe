@@ -23,10 +23,9 @@ BINDIR  = /usr/local/bin
 LIBDIR  = /usr/local/lib
 
 # Internal settings
-FE      = fe
-LIB     = $(shell etc/c-conf -c c-conf.cache so-name $(FE))
-OPTFLAG = $(shell etc/c-conf -c c-conf.cache optflags)
-OPTFLAG = "-g -pg"
+FE      ?= fe
+LIB     ?= $(shell etc/c-conf -c c-conf.cache so-name $(FE))
+OPTFLAG ?= $(shell etc/c-conf -c c-conf.cache optflags)
 
 # Dist archive
 TAR     = /tmp/fe-$(VER).tar.gz
@@ -52,6 +51,9 @@ local:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
 	  USYS=$(USYS) OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" \
 	  make -C main
+
+profiling:
+	OPTFLAG="-g -pg" make local
 
 test: install
 	LIB=$(LIB) FE=$(FE) OPTFLAG=$(OPTFLAG) make -C test

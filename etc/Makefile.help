@@ -1,20 +1,23 @@
 
 Make what? Choose one of:
 
-  make local    Local build, only to check that building works, you can't do
-  		anything with a locally built fe. Be sure to have a
-		Makefile.local with your MAGIC phrase, see INSTALL.txt for
-		instructions.
+  make local     Local build, only to check that building works, you can't do
+  		 anything with a locally built fe. Be sure to have a
+		 Makefile.local with your MAGIC phrase, see INSTALL.txt for
+		 instructions.
 
-  make install	Local build plus installation to BINDIR and LIBDIR (check the
-       		Makefile to see the values). Make sure that you have prepared a
-		Makefile.local, see INSTALL.txt.
+  make profiling Local build supplying "-g -pg" for compilation and linkage,
+  		 useful for profiling the stand-alone binary that appears as
+		 main/fe.
 
-  make test	Installation build (make install) plus a few sanity checks to
-       		verify that fe works on your flavor of Unix
+  make install	 Local build plus installation to BINDIR and LIBDIR (check the
+       		 Makefile to see the values). Make sure that you have prepared a
+		 Makefile.local, see INSTALL.txt.
 
-  make clean	Removes build artifacts
+  make test	 Installation build (make install) plus a few sanity checks to
+       		 verify that fe works on your flavor of Unix
 
-  make dist	Creates a distribution archive /tmp/fe-X.YY.tar.gz, implies
-       		make clean
+  make clean	 Removes build artifacts
 
+  make dist	 Creates a distribution archive /tmp/fe-X.YY.tar.gz, implies
+       		 make clean
