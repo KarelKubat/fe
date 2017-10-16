@@ -5,8 +5,8 @@ extern void cryptfile(char const *f);
 extern char *quoted(char const *s);
 extern void usage(void);
 
-int main(int argc, char **argv) {
-    int opt, target_set = 0, i, ret = 0;
+int main(int argc, char **argv, char **envp) {
+    int opt, target_set = 0, i, ret = 0, dump_env = 0;
     char *file_to_crypt = 0, buffer[1024], *sysbuf, *key = 0, *key_again, *cp;
     static FeCtx ctx;
 
@@ -15,11 +15,13 @@ int main(int argc, char **argv) {
 	{ "help",             no_argument,       0, 'h' },
 	{ "key",              required_argument, 0, 'k' },
 	{ "stderr-log",       no_argument,       0, 's' },
+	{ "dump-environment", no_argument,       0, 'E' },
 	{ "environment",      no_argument,       0, 'e' },
 	{ "ignore-uncaught",  no_argument,       0, 'i' },
 	{ "debug",            no_argument,       0, 'd' },
 	{ "target",           required_argument, 0, 't' },
 	{ "file",             required_argument, 0, 'f' },
+	{ "verbose",          no_argument,       0, 'v' },
 	{ "version",          no_argument,       0, 'V' },
 	{ 0,		      0,		 0, 0   }
     };
@@ -29,7 +31,7 @@ int main(int argc, char **argv) {
 	usage();
 
     /* Parse command line */
-    while ( (opt = getopt_long(argc, argv, "h?k:f:t:vsiVed",
+    while ( (opt = getopt_long(argc, argv, "h?k:f:t:vsiVEed",
 			       longopts, 0)) > -1 )
 	switch (opt) {
 	case 'h':
@@ -40,6 +42,9 @@ int main(int argc, char **argv) {
 	    break;
 	case 's':
 	    ctx.msg_dst = dst_stderr;
+	    break;
+	case 'E':
+	    dump_env = 1;
 	    break;
 	case 'e':
 	    ctx.use_env = 1;
@@ -105,14 +110,16 @@ int main(int argc, char **argv) {
     atexit(fectx_unset);
 
     /* Ignore signals that we can ignore, we don't want to stop while
-     * transcrypting.
+     * directly (en)crypting a file. Don't set signals in passthru mode.
      */
-    signal(SIGHUP,  SIG_IGN);
-    signal(SIGINT,  SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
-    signal(SIGPIPE, SIG_IGN);
-    signal(SIGTERM, SIG_IGN);
-    signal(SIGTSTP, SIG_IGN);
+    if (file_to_crypt) {
+	signal(SIGHUP,  SIG_IGN);
+	signal(SIGINT,  SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+    }
 
     if (file_to_crypt) {
 	if (optind != argc)
@@ -140,10 +147,17 @@ int main(int argc, char **argv) {
 	for (i = optind; i < argc; i++) {
 	    char *q = quoted(argv[i]);
 	    sysbuf = fe_xstrcat(sysbuf, q);
+	    free(q);
 	    if (i < argc - 1)
 		sysbuf = fe_xstrcat(sysbuf, " ");
 	}
 	fe_msg(&ctx, "About to run command: %s\n", sysbuf);
+	if (dump_env) {
+	    fe_msg(&ctx, "Environment dump:\n");
+	    for (char **e = envp; *e; e++)
+		fe_msg(&ctx, "%s\n", *e);
+	}
+	
 	if ( (ret = system(sysbuf)) == -1 )
 	    fe_error("Failed to run command: cannot fork\n");
 	else if (ret == 127)

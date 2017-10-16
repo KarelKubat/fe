@@ -14,7 +14,9 @@
 # [KK 2015-11-09] 1.05 Added long options --target etc. Adjusted usage info.
 #		       Added a Porting section to TECHINFO.txt. Progress bar
 #		       during "fe -f ..." shows the ETA in secs.
-VER     = 1.05
+# [KK 2017-04-30] 1.06 Signal interrupts only installed when directly crypting,
+#		       not in pass-thru mode.
+VER     = 1.06
 
 # Target paths
 BINDIR  = /usr/local/bin
