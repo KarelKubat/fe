@@ -23,10 +23,23 @@ EOF
 # We have a reference file. Let's see if this version still encrypts correctly.
 $ENV{FE_KEY} = 'lorem';
 
-print("Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver\n");
-run("fe -vt /tmp/$$ cp reference/lorem.txt /tmp/$$");
-print("Comparing /tmp/$$ with pre-existing reference/lorem-$ver.txt\n");
+print("Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver ",
+      "using immediate file transcription\n");
+run("cp reference/lorem.txt /tmp/$$");
+run("fe -f /tmp/$$");
 run("diff /tmp/$$ reference/lorem-$ver.txt");
+
+# Get the uname of this system. The following will not work on Darwin.
+open(my $if, "uname |");
+if (<$if> !~ /Darwin/) {
+    # Remove file from above step and run via external cp command
+    unlink("/tmp/$$") or die("Failed to unlink /tmp/$$: $!\n");
+    print("Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver ",
+	  "using external command cp\n");
+    run("fe -vt /tmp/$$ cp reference/lorem.txt /tmp/$$");
+    print("Comparing /tmp/$$ with pre-existing reference/lorem-$ver.txt\n");
+    run("diff /tmp/$$ reference/lorem-$ver.txt");
+}
 
 # Check that decryption works
 print("Decrypting /tmp/$$\n");

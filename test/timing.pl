@@ -22,13 +22,16 @@ $t0 = [gettimeofday()];
 system("fe -k secret -f /tmp/large.txt") and die;
 print("Inline transcryption : ", tv_interval($t0), "sec\n");
 
-# Transcrypt using cp
-$t0 = [gettimeofday()];
-system("fe -k secret -t /tmp/large.txt cp /tmp/large.txt /tmp/large1.txt")
-  and die;
-print("Transcribing via cp  : ", tv_interval($t0), "sec\n");
+open(my $if, "uname |") or die;
+if (<$if> !~ /Darwin/) {
+    # Transcrypt using cp
+    $t0 = [gettimeofday()];
+    system("fe -k secret -t /tmp/large.txt cp /tmp/large.txt /tmp/large1.txt")
+      and die;
+    print("Transcribing via cp  : ", tv_interval($t0), "sec\n");
 
-# Check
-system("diff /tmp/large0.txt /tmp/large1.txt")
-  and die("encryption/decryption failed, ",
-	  "/tmp/large.txt and /tmp/large1.txt differ\n");
+    # Check
+    system("diff /tmp/large0.txt /tmp/large1.txt")
+      and die("encryption/decryption failed, ",
+	      "/tmp/large.txt and /tmp/large1.txt differ\n");
+}
