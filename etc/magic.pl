@@ -9,7 +9,7 @@ die("You're not a magician\n") if ($magic =~ /^\s*$/);
 print("static char magic[] = {\n");
 my $counter = 131;
 for my $ch (split('', $magic)) {
-    printf("    %d,\n", ord($ch) + $counter);
+    printf("    %d,\n", (ord($ch) + $counter) % 256);
     $counter++;
 }
 print("    0\n};\n");

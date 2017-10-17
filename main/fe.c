@@ -85,16 +85,16 @@ int main(int argc, char **argv, char **envp) {
 	    if (strcmp(key, key_again))
 		fe_error("Key entry mismatch\n");
 	} else {
-	    fgets(buffer, sizeof(buffer) - 1, stdin);
+            cp = fgets(buffer, sizeof(buffer) - 1, stdin);
 	    if ( (cp = strchr(buffer, '\n')) )
 		*cp = 0;
 	    key = fe_xstrdup(buffer);
 	}
-	    
+
     }
     if (! *key)
 	fe_error("Empty key\n");
-	    
+
     ctx.seed = fe_xstrdup(key);
 
     /* Find targets, if not done so yet via flags -t */
@@ -129,7 +129,7 @@ int main(int argc, char **argv, char **envp) {
 	fe_error("No action taken, try 'fe -h' for an overview\n");
     } else {
 	/* Going to launch the command with the shared object underneath */
-	
+
 #if USYS == UN_DARWIN
 	/* For MacOSX: This unfortunately works only for selected programs.
 	 * E.g. stuff from /usr/local/bin/ will obey loaded libs. but standard
@@ -155,11 +155,12 @@ int main(int argc, char **argv, char **envp) {
 	}
 	fe_msg(&ctx, "About to run command: %s\n", sysbuf);
 	if (dump_env) {
+          char **e;
 	    fe_msg(&ctx, "Environment dump:\n");
-	    for (char **e = envp; *e; e++)
+	    for (e = envp; *e; e++)
 		fe_msg(&ctx, "%s\n", *e);
 	}
-	
+
 	if ( (ret = system(sysbuf)) == -1 )
 	    fe_error("Failed to run command: cannot fork\n");
 	else if (ret == 127)
@@ -168,4 +169,3 @@ int main(int argc, char **argv, char **envp) {
 
     return ret;
 }
-	       

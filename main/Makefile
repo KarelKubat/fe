@@ -16,7 +16,7 @@ $(LIBAR): $(O)
 	      $(shell ../etc/c-conf -c ../c-conf.cache \
 		      ifheader getopt.h HAVE_GETOPT_H) \
               -DLIBDIR=\"$(LIBDIR)\" -DBINDIR=\"$(BINDIR)\" \
-	      -DMAGIC=\"$(MAGIC)\" -DUSYS=$(USYS) $<
+	      -DMAGIC="$(MAGIC)" -DUSYS=$(USYS) $<
 
 usage.o: usage.c ../Makefile
 fe.o: fe.c ../Makefile

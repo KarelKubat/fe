@@ -8,7 +8,7 @@ int main() {
     FeCtx *ctx;
     int ch;
 
-    ctx = fe_setup("user-secret", 1, dst_syslog, 1, 1, 0);
+    ctx = fe_setup("user-secret", 1, dst_stderr, 1, 1, 0);
     fe_target_add(ctx, fname);
 
     printf("Writing %s using fputs\n", fname);

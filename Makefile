@@ -16,11 +16,13 @@
 #		       during "fe -f ..." shows the ETA in secs.
 # [KK 2017-04-30] 1.06 Signal interrupts only installed when directly crypting,
 #		       not in pass-thru mode.
-VER     = 1.06
+# [KK 2017-10-17] 1.07 Linux build fixed. BINDIR and LIBDIR can be set
+#		       externally. Tests log to stderr instead of syslog.
+VER     = 1.07
 
 # Target paths
-BINDIR  = /usr/local/bin
-LIBDIR  = /usr/local/lib
+BINDIR  ?= /usr/local/bin
+LIBDIR  ?= /usr/local/lib
 
 # Internal settings
 FE      ?= fe
@@ -56,7 +58,7 @@ profiling:
 	OPTFLAG="-g -pg" make local
 
 test: install
-	LIB=$(LIB) FE=$(FE) OPTFLAG=$(OPTFLAG) make -C test
+	LIBDIR=$(LIBDIR) LIB=$(LIB) FE=$(FE) OPTFLAG=$(OPTFLAG) make -C test
 
 install:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \

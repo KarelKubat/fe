@@ -39,6 +39,14 @@ On Linux, type (as user "root"):
 This will update the table of the dynamic linker, so that
 /usr/local/lib/libfe.so will be found at next invocations of fe.
 
+If you don't want to install to /usr/local/{bin,dir} then you can set
+BINDIR and LIBDIR accordingly before typing "make install":
+    export BINDIR=/where/ever/bin
+    export LIBDIR=/where/ever/lib
+    make install
+In that case, for Linux, you will have to add /where/ever/lib to your
+list of library directories in /etc/ld.so.conf.
+
 
 4. Sanity checking
 

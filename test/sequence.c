@@ -5,7 +5,7 @@ int main() {
     BitSequence hashval[HASH_BYTE_SIZE];
     FeCtx *ctx;
 
-    ctx = fe_setup("user secret", 1, dst_syslog, 1, 1, 0);
+    ctx = fe_setup("user secret", 1, dst_stderr, 1, 1, 0);
 
     printf("Generating 10000 random bytes... ");
     for (i = 0; i < 10000; i++)

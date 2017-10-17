@@ -17,7 +17,7 @@ foo: $(T)
 
 %.t: %.c ../lib/$(LIB)
 	$(CC) -Wall -Werror -DMAGIC=\"dontcare\" -o $@ $< \
-	      -L../main -llocal -l$(FE) \
+	      -L../main -llocal -L$(LIBDIR) -l$(FE) \
 	      $(shell ../etc/c-conf -c ../c-conf.cache lib dl)
 
 clean:

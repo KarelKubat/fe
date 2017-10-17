@@ -444,7 +444,7 @@ ENDHELP
     if (uname() eq 'Darwin') {
 	$flags = "-dynamiclib -Wl,-single_module";
     } else {
-	$flags = "-shared";
+	$flags = "-shared -fPIC";
     }
     msg ("Shared library linkage flags: '$flags'\n");
     output ($flags);
