@@ -20,7 +20,7 @@ size_t fwrite(void const *buf, size_t sz, size_t items, FILE *f) {
     /* Encrypt our copy and write it. Make sure transcryption rehashes. */
     startoff = ftell(f);
     *hashval = 0;
-    fe_cryptbuf(crypted_buf, sz * items, startoff, hashval);
+    fe_cryptbuf(crypted_buf, sz * items, startoff, hashval, 0);
     ret = real_fwrite(crypted_buf, sz, items, f);
     fe_msg(fectx(), "Request to fwrite(buf, %ld, %ld, fd=%d) "
 	   "from offset %lu => %lu\n",
@@ -31,4 +31,3 @@ size_t fwrite(void const *buf, size_t sz, size_t items, FILE *f) {
 
     return ret;
 }
-    

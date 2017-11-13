@@ -9,7 +9,7 @@ int main() {
 
     printf("Generating 10000 random bytes... ");
     for (i = 0; i < 10000; i++)
-	s[i] = fe_randbyte(ctx, i, hashval);
+      s[i] = fe_randbyte(ctx, i, hashval, 0);
 
     printf("Sequence generated, first 100 values:\n");
     for (i = 0; i < 100; i++)
@@ -21,7 +21,7 @@ int main() {
 	    fe_error("Triplicate value at index %d\n", i);
 
     for (i = 10000 - 1; i >= 0; i--) {
-	r = fe_randbyte(ctx, i, hashval);
+      r = fe_randbyte(ctx, i, hashval, 0);
 	if (s[i] != r)
 	    fe_error("Sequence test failed at index %d\n", i);
     }

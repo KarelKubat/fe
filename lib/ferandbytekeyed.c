@@ -1,6 +1,7 @@
 #include "../fe.h"
 
-char fe_randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval) {
+static char fe_randbyte_keyed_1(char const *key, uint32_t x,
+                                BitSequence *hashval) {
     char *template, *data;
     HashReturn ret;
     static uint32_t last_x, required_x;
@@ -13,7 +14,7 @@ char fe_randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval) {
     */
     required_x = (x / HASH_BYTE_SIZE) * HASH_BYTE_SIZE;
     if (! *hashval || last_x != required_x) {
-	
+
 	/* Get basic template for hash input: offset with user key,
 	 * multiplied until we get at least HASH_BYTE_SIZE chars
 	 * as input
@@ -51,11 +52,17 @@ char fe_randbyte_keyed(char const *key, uint32_t x, BitSequence *hashval) {
 	    fprintf(stderr, "\n");
 	}
 	*/
-	
+
 	free(template);
 	free(data);
     }
 
     /* Next pseudorandom value is in the hashed bits */
     return (hashval[x % HASH_BYTE_SIZE]) & 0xff;
+}
+
+char fe_randbyte_keyed(char const *key, uint32_t x,
+                         BitSequence *hashval, int algorithm) {
+    /* This needs to select by algorithm, 1 being still the default. */
+    return fe_randbyte_keyed_1(key, x, hashval);
 }

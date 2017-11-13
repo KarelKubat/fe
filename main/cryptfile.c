@@ -2,7 +2,7 @@
 
 #define BLOCKSIZE 102400
 
-void cryptfile(char const *f) {
+void cryptfile(char const *f, int algorithm) {
     int fd, i, j;
     char buf[BLOCKSIZE];
     size_t offset;
@@ -37,7 +37,7 @@ void cryptfile(char const *f) {
 	totread += nread;
 
 	/* Encrypt */
-	fe_cryptbuf(buf, nread, offset, hashval);
+	fe_cryptbuf(buf, nread, offset, hashval, algorithm);
 
 	/* Update progress meter */
 	if (isatty(1)) {
@@ -47,8 +47,8 @@ void cryptfile(char const *f) {
 	    /* Update display only if we have a sec or more difference. */
 	    if (last_elapsed < elapsed_time) {
 		last_elapsed = elapsed_time;
-		
-/* For debugging the progress bar, set this to 1: */		
+
+/* For debugging the progress bar, set this to 1: */
 #if 0
 		{
 		    int ndots = (int) (60 * totread / statbuf.st_size);
@@ -58,7 +58,7 @@ void cryptfile(char const *f) {
 			   (long)complete_time, (long)elapsed_time);
 		}
 #endif
-		
+
 		printf("\r[");
 		for (i = 0; i < (60 * (double)totread / statbuf.st_size); i++)
 		    putchar('.');
@@ -96,7 +96,7 @@ void cryptfile(char const *f) {
     for (i = 0; i < 60; i++)
 	putchar('.');
     printf("          done]\n");
-    
+
     if (close(fd) < 0)
 	fe_error("Close error on file %s: %s\n", f, strerror(errno));
 

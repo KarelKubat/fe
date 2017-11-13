@@ -15,7 +15,7 @@ ssize_t pread(int fd, void *buf, size_t bytes, off_t offset) {
 	   fd, (long unsigned) bytes, (long)offset);
     ret = real_pread(fd, buf, bytes, offset);
     *hashval = 0;
-    fe_cryptbuf(buf, ret, offset, hashval);
+    fe_cryptbuf(buf, ret, offset, hashval, 0);
     
     return ret;    
 }

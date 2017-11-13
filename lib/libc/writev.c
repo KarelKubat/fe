@@ -25,7 +25,7 @@ ssize_t writev(int fd, const struct iovec *iovec, int iovcnt) {
 	iv[i].iov_base = fe_xmalloc(iv[i].iov_len);
 	memcpy(iv[i].iov_base, iovec[i].iov_base, iv[i].iov_len);
 	*hashval = 0;
-	fe_cryptbuf(iv[i].iov_base, iv[i].iov_len, startoff, hashval);
+	fe_cryptbuf(iv[i].iov_base, iv[i].iov_len, startoff, hashval, 1);
     }
 
     /* Write it out */

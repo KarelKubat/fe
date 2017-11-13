@@ -18,7 +18,8 @@
 #		       not in pass-thru mode.
 # [KK 2017-10-17] 1.07 Linux build fixed. BINDIR and LIBDIR can be set
 #		       externally. Tests log to stderr instead of syslog.
-VER     = 1.07
+# [KK 2017-11-13] 1.08 --algorithm added, preparing for faster algo.
+VER     = 2.00
 
 # Target paths
 BINDIR  ?= /usr/local/bin

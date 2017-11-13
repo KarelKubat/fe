@@ -21,7 +21,7 @@ int vfprintf(FILE *f, char const *fmt, va_list args) {
     startoff = ftell(f);
     *hashval = 0;
     ret = fe_xvasprintf(&buf, fmt, args);
-    fe_cryptbuf(buf, ret, startoff, hashval);
+    fe_cryptbuf(buf, ret, startoff, hashval, 0);
     real_fwrite(buf, 1, ret, f);
     return ret;
 }

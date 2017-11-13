@@ -17,7 +17,7 @@ ssize_t read(int fd, void *buf, size_t bytes) {
     startoff = lseek(fd, 0, SEEK_CUR);
     ret = real_read(fd, buf, bytes);
     *hashval = 0;
-    fe_cryptbuf(buf, ret, startoff, hashval);
+    fe_cryptbuf(buf, ret, startoff, hashval, 0);
     
     return ret;
 }

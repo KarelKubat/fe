@@ -19,7 +19,7 @@ ssize_t pwrite(int fd, const void *buf, size_t bytes, off_t offset) {
 
     /* Encrypt our copy and write it. Make sure transcryption rehashes. */
     *hashval = 0;
-    fe_cryptbuf(crypted_buf, bytes, offset, hashval);
+    fe_cryptbuf(crypted_buf, bytes, offset, hashval, 0);
     ret = real_pwrite(fd, crypted_buf, bytes, offset);
 
     /* Cleanup */

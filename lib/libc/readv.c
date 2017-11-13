@@ -18,7 +18,7 @@ ssize_t readv(int fd, const struct iovec *iov, int iovcnt) {
     ret = real_readv(fd, iov, iovcnt);
     *hashval = 0;
     for (i = 0; i < iovcnt; i++) 
-	fe_cryptbuf(iov[i].iov_base, iov[i].iov_len, startoff, hashval);
+      fe_cryptbuf(iov[i].iov_base, iov[i].iov_len, startoff, hashval, 0);
 
     return ret;
 }
