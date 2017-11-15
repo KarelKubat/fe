@@ -1,5 +1,11 @@
 use strict;
 
+sub run($) {
+    my $cmd = shift;
+    print(">> $cmd\n");
+    system($cmd) and die("reference.pl: $cmd failed\n");
+}
+
 # Get major version of fe
 open(my $if, "fe -V |") or die("can't run fe to get version id");
 my $ver = <$if>;
@@ -10,46 +16,47 @@ $ver =~ s{\..*}{};
 if (! -f "reference/lorem-$ver.txt") {
     die <<"EOF";
 
-Reference file lorem-$ver.txt is missing. Possibly because I did not create it
-yet. To do so:
+Reference file lorem-$ver.txt is missing. To create it, execute:
 
-    cd test/reference
-    export FE_KEY=lorem
-    fe -t lorem-$ver.txt cp lorem.txt lorem-$ver.txt
+  cp test/reference/lorem.txt test/reference/lorem-$ver.txt
+  fe -k lorem -f test/reference/lorem-$ver.txt
 
 EOF
 }
 
 # We have a reference file. Let's see if this version still encrypts correctly.
+
+print("\n1 Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver ",
+      "using immediate file transcription and a commandline key\n");
+run("cp reference/lorem.txt /tmp/$$-clikey");
+run("fe -vsk lorem -f /tmp/$$-clikey");
+run("diff /tmp/$$-clikey reference/lorem-$ver.txt");
+
+print("\n2 Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver ",
+      "using immediate file transcription and an environment key\n");
 $ENV{FE_KEY} = 'lorem';
+run("cp reference/lorem.txt /tmp/$$-envkey");
+run("FE_KEY=lorem fe -vsf /tmp/$$-envkey");
+run("diff /tmp/$$-envkey reference/lorem-$ver.txt");
 
-print("Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver ",
-      "using immediate file transcription\n");
-run("cp reference/lorem.txt /tmp/$$");
-run("fe -f /tmp/$$");
-run("diff /tmp/$$ reference/lorem-$ver.txt");
-
-# Get the uname of this system. The following will not work on Darwin.
-open(my $if, "uname |");
+# Get the uname of this system. The following will not work on Darwin because
+# of SIP (or you might've disabled it, but that cannot be assumed).
+open($if, "uname |");
 if (<$if> !~ /Darwin/) {
     # Remove file from above step and run via external cp command
-    unlink("/tmp/$$") or die("Failed to unlink /tmp/$$: $!\n");
-    print("Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver ",
-	  "using external command cp\n");
-    run("fe -vt /tmp/$$ cp reference/lorem.txt /tmp/$$");
+    run("rm -f /tmp/$$*");
+    print("\n3 Transcrypting reference/lorem.txt into /tmp/$$ for fe version ",
+          "$ver using external command cp\n");
+    run("fe -vst /tmp/$$ -k lorem cp reference/lorem.txt /tmp/$$");
     print("Comparing /tmp/$$ with pre-existing reference/lorem-$ver.txt\n");
     run("diff /tmp/$$ reference/lorem-$ver.txt");
 }
 
 # Check that decryption works
-print("Decrypting /tmp/$$\n");
-run("fe -f /tmp/$$");
+print("\n4 Decrypting /tmp/$$ using an environment key\n");
+run("fe -vsf /tmp/$$");
 print("Comparing plaintext /tmp/$$ with reference/lorem.txt\n");
 run("diff /tmp/$$ reference/lorem.txt");
 
-print("Version reference tests: OK\n");
+print("\n5 Version reference tests: OK\n");
 
-sub run($) {
-    my $cmd = shift;
-    system($cmd) and die("reference.pl: $cmd failed\n");
-}

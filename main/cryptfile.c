@@ -2,7 +2,7 @@
 
 #define BLOCKSIZE 102400
 
-void cryptfile(char const *f, int algorithm) {
+void cryptfile(char const *f) {
     int fd, i, j;
     char buf[BLOCKSIZE];
     size_t offset;
@@ -37,7 +37,7 @@ void cryptfile(char const *f, int algorithm) {
 	totread += nread;
 
 	/* Encrypt */
-	fe_cryptbuf(buf, nread, offset, hashval, algorithm);
+	fe_cryptbuf(buf, nread, offset, hashval);
 
 	/* Update progress meter */
 	if (isatty(1)) {

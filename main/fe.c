@@ -1,19 +1,18 @@
 #include "../fe.h"
 
 /* Local functions for the main program, undeclared in fe.h */
-extern void cryptfile(char const *f, int algorithm);
+extern void cryptfile(char const *f);
 extern char *quoted(char const *s);
 extern void usage(void);
 
 int main(int argc, char **argv, char **envp) {
-    int opt, target_set = 0, i, ret = 0, dump_env = 0, algorithm = 0;
+    int opt, target_set = 0, i, ret = 0, dump_env = 0;
     char *file_to_crypt = 0, buffer[1024], *sysbuf, *key = 0, *key_again, *cp;
     static FeCtx ctx;
 
     /* Long options to parse from the cmd line */
     static struct option longopts[] = {
 	{ "help",             no_argument,       0, 'h' },
-        { "algorithm",        required_argument, 0, 'a' },
 	{ "key",              required_argument, 0, 'k' },
 	{ "stderr-log",       no_argument,       0, 's' },
 	{ "dump-environment", no_argument,       0, 'E' },
@@ -32,19 +31,12 @@ int main(int argc, char **argv, char **envp) {
 	usage();
 
     /* Parse command line */
-    while ( (opt = getopt_long(argc, argv, "h?ak:f:t:vsiVEed",
+    while ( (opt = getopt_long(argc, argv, "h?a:k:f:t:vsiVEed",
 			       longopts, 0)) > -1 )
 	switch (opt) {
 	case 'h':
 	case '?':
 	    usage();
-        case 'a':
-            if (sscanf(optarg, "%d", &algorithm) < 1)
-                fe_error("Bad --algorithm value, requires number");
-            if (algorithm < 1 || algorithm > VER[0] - '0')
-                fe_error("Bad --algorithm, values 1..%d allowed",
-                         VER[0] - '0');
-            break;
 	case 'k':
 	    key = optarg;
 	    break;
@@ -78,12 +70,6 @@ int main(int argc, char **argv, char **envp) {
 	    printf(VER "\n");
 	    return 0;
 	}
-
-    /* A non-standard algorithm is only allowed when transcrypting a file,
-     * not in pass-thru mode. */
-    if (algorithm && !file_to_crypt)
-        fe_error("Non-standard --algorithm selection is only allowed with "
-                 "--file selection");
 
     /* When not in debug mode: get the crypto key unless given already.
      * Debug key is set to an arbitrary string, it won't be used anywhere,
@@ -136,7 +122,7 @@ int main(int argc, char **argv, char **envp) {
 	signal(SIGTERM, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
 
-	cryptfile(file_to_crypt, algorithm);
+	cryptfile(file_to_crypt);
     } else if (optind == argc) {
 	fe_error("No action taken, try 'fe -h' for an overview\n");
     } else {
