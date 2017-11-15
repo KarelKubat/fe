@@ -18,12 +18,16 @@
 #		       not in pass-thru mode.
 # [KK 2017-10-17] 1.07 Linux build fixed. BINDIR and LIBDIR can be set
 #		       externally. Tests log to stderr instead of syslog.
-# [KK 2017-11-13] 1.08 --algorithm added, preparing for faster algo.
+# [KK 2017-11-15] 2.00 Algorithm change, files transcrypted with previous
+#                      version 1.* cannot be handled by this. No more local
+#                      magic setting. 
 VER     = 2.00
 
-# Target paths
-BINDIR  ?= /usr/local/bin
-LIBDIR  ?= /usr/local/lib
+# Target paths. You probably don't want to install under private dirs under
+# $HOME, it seriously messes up library preloading and you have to modify
+# /etc/ld.so.conf and so on, and you need to know what you are doing.
+BINDIR  = /usr/local/bin
+LIBDIR  = /usr/local/lib
 
 # Internal settings
 FE      ?= fe
@@ -42,36 +46,34 @@ ifeq ($(UNAME), Linux)
     USYS = UN_LINUX
 endif
 
-include Makefile.local
-
 foo:
 	@cat etc/Makefile.help
 	@exit 1
 
 local:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
-	  OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" make -C lib
+	  OPTFLAG="$(OPTFLAG)" make -C lib
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
-	  USYS=$(USYS) OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" \
-	  make -C main
+	  USYS=$(USYS) OPTFLAG="$(OPTFLAG)" make -C main
 
 profiling:
-	OPTFLAG="-g -pg" make local
+	OPTFLAG=-pg make local
+	@echo
+	@echo "Remember to recompile and reinstall without profiling once"
+	@echo "you are ready!"
+	@echo
+
+timing: local
+	LIB=$(LIB) OPTFLAG="$(OPTFLAG)" FE=$(FE) VER=$(VER) make -C timing
 
 test: install
-	LIBDIR=$(LIBDIR) LIB=$(LIB) FE=$(FE) OPTFLAG=$(OPTFLAG) make -C test
+	LIBDIR=$(LIBDIR) LIB=$(LIB) FE=$(FE) OPTFLAG="$(OPTFLAG)" make -C test
 
 install:
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
-	  OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" make -C lib  install
+	  OPTFLAG="$(OPTFLAG)" make -C lib  install
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) LIB=$(LIB) VER=$(VER) FE=$(FE) \
-	  USYS=$(USYS) OPTFLAG=$(OPTFLAG) MAGIC="$(MAGIC)" \
-	  make -C main install
-	@if [ "$(OPTFLAG)" = "-g" ] ; then \
-	    echo; \
-	    echo "WARNING: Compiled with debugging symbols"; \
-	    echo "WARNING: Edit Makefile and recompile for production"; \
-	 fi
+	  USYS=$(USYS) OPTFLAG="$(OPTFLAG)" make -C main install
 
 clean:
 	LIB=$(LIB) FE=$(FE) make -C lib clean
