@@ -20,7 +20,8 @@
 #		       externally. Tests log to stderr instead of syslog.
 # [KK 2017-11-15] 2.00 Algorithm change, files transcrypted with previous
 #                      version 1.* cannot be handled by this. No more local
-#                      magic setting. 
+#                      magic setting.
+# [KK 2017-11-15] 2.01 Targets are stored as resolved filenames.
 VER     = 2.00
 
 # Target paths. You probably don't want to install under private dirs under
