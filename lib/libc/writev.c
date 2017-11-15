@@ -15,9 +15,9 @@ ssize_t writev(int fd, const struct iovec *iovec, int iovcnt) {
 
     fe_msg(fectx(), "Request to writev(%d, iov, %d)\n", fd, iovcnt);
 
-    /* Remember the offset. Used to key all iovec buffer transcrypts. */    
+    /* Remember the offset. Used to key all iovec buffer transcrypts. */
     startoff = lseek(fd, 0, SEEK_SET);
-    
+
     /* Make our own iovec and transcrypt. Make sure transcryption rehashes. */
     iv = fe_xmalloc(iovcnt * sizeof(struct  iovec));
     for (i = 0; i < iovcnt; i++) {
@@ -25,7 +25,7 @@ ssize_t writev(int fd, const struct iovec *iovec, int iovcnt) {
 	iv[i].iov_base = fe_xmalloc(iv[i].iov_len);
 	memcpy(iv[i].iov_base, iovec[i].iov_base, iv[i].iov_len);
 	*hashval = 0;
-	fe_cryptbuf(iv[i].iov_base, iv[i].iov_len, startoff, hashval, 1);
+	fe_cryptbuf(iv[i].iov_base, iv[i].iov_len, startoff, hashval);
     }
 
     /* Write it out */

@@ -26,6 +26,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/uio.h>
 
@@ -68,11 +69,6 @@ typedef struct {
     int debug;
 } FeCtx;
 
-/* Check that MAGIC is defined, which should be kept in Makefile.local */
-#ifndef MAGIC
-#error "You need to define a MAGIC string for the build. RTFM please."
-#endif
-
 /* Hashing-related */
 #define HASH_BIT_SIZE   1024
 #define HASH_BYTE_SIZE  (HASH_BIT_SIZE / 8)
@@ -80,7 +76,7 @@ typedef struct {
 /* Shared lib functions */
 extern void fe_close_fd(int fd);
 extern void fe_cryptbuf(char *buf, size_t bufsz, size_t offset,
-			BitSequence *hashval, int algorithm);
+			BitSequence *hashval);
 extern void *fe_dllookup(char const *name);
 extern void fe_error(char const *fmt, ...)
     __attribute__((format(printf, 1, 2)));
@@ -88,10 +84,7 @@ extern int fe_is_fd_target(int fd);
 extern int fe_isfile(struct stat const *st);
 extern void fe_msg(FeCtx const *ctx, char const *fmt, ...)
     __attribute__((format(printf, 2, 3)));
-extern char fe_randbyte(FeCtx *ctx, uint32_t x,
-                        BitSequence *hashval, int algorithm);
-extern char fe_randbyte_keyed(char const *key, uint32_t x,
-			      BitSequence *hashval, int algorithm);
+extern char fe_randbyte(FeCtx *ctx, uint32_t x, BitSequence *hashval);
 extern char *fe_seed_deserialize(char const *buf);
 extern char *fe_seed_serialize(char const *buf);
 extern FeCtx *fe_setup(char const *key, int verbosity, MsgDst dst,

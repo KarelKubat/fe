@@ -19,15 +19,13 @@ $(LIB): $(O)
 	      -DVER=\"$(VER)\" -DLIB=\"$(LIB)\" \
 	      -DHAVE_LIBIO=$(shell ../etc/c-conf -c ../c-conf.cache \
 			     ifheader libio.h HAVE_LIBIO_H_) \
-	      -DMAGIC="$(MAGIC)" -DLIBDIR=\"$(LIBDIR)\" \
+	      -DLIBDIR=\"$(LIBDIR)\" \
 	      -DBINDIR=\"$(BINDIR)\" $(OPTFLAG) -o $@ $<
 
 skein.o: skein.c
 	$(CC) -c $(shell ../etc/c-conf -c ../c-conf.cache so-cflags) $<
 
-feseedserialize.o: feseedserialize.c magic.h
-magic.h: ../Makefile.local
-	echo "$(MAGIC)" | perl ../etc/magic.pl > magic.h
+feseedserialize.o: feseedserialize.c
 
 clean:
-	rm -f $(O) $(LIB) magic.h
+	rm -f $(O) $(LIB)

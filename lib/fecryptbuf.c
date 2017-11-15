@@ -3,7 +3,7 @@
 #define BYTES_TO_SHOW 100
 
 void fe_cryptbuf(char *buf, size_t bufsz, size_t offset,
-                 BitSequence *hashval, int algorithm) {
+                 BitSequence *hashval) {
     size_t i;
     char *bufp, *pr = 0, conv[10];
 
@@ -12,7 +12,7 @@ void fe_cryptbuf(char *buf, size_t bufsz, size_t offset,
 
     if (! fectx()->debug)
 	for (i = 0, bufp = buf;  i < bufsz;  i++, bufp++, offset++)
-          *bufp ^= fe_randbyte(fectx(), offset, hashval, algorithm);
+          *bufp ^= fe_randbyte(fectx(), offset, hashval);
 
     if (fectx()->msg_verbosity) {
 	for (i = 0, bufp = buf; i < BYTES_TO_SHOW && i < bufsz; i++, bufp++) {
