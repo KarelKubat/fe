@@ -3,7 +3,7 @@
 void fe_target_by_path(char const *f, int newfd) {
     struct stat statbuf;
     int i;
-    char *thisrealp, *targetrealp;
+    char *real_fname;
     int org_errno;
 
     /* Stack errno's */
@@ -16,21 +16,16 @@ void fe_target_by_path(char const *f, int newfd) {
     }
 
     /* Examine what we have */
-    thisrealp = fe_xrealpath(f);
+    real_fname = fe_xrealpath(f);
     for (i = 0; i < fectx()->ntargets; i++) {
-	targetrealp = fe_xrealpath(fectx()->targets[i].name);
-	if (!strcmp(thisrealp, targetrealp)) {
+	if (!strcmp(real_fname, fectx()->targets[i].name)) {
 	    fectx()->targets[i].fd = newfd;
-	    fe_msg(fectx(), "File %s, fd %d: open as target\n", 
-		f, newfd);
-	    free(targetrealp);
+	    fe_msg(fectx(), "File %s, fd %d: open as target\n",
+		real_fname, newfd);
 	    break;
 	}
-	free(targetrealp);
     }
-    free(thisrealp);
+    free(real_fname);
 
     errno = org_errno;
 }
-
-    
