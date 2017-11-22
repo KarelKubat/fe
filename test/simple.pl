@@ -25,25 +25,26 @@ sub decrypt_and_cat($$) {
 }
 
 # Create simple file
-printf("=== Creating: /tmp/$$.txt\n");
+printf("=== 1. Creating: /tmp/$$.txt\n");
 open(my $fh, ">/tmp/$$.txt") or die;
 print $fh ("Hello World!");
 close($fh);
 print("File /tmp/$$.txt: created\n");
 
 # Encrypt
-printf("=== Encrypting: /tmp/$$.txt\n");
+printf("=== 2. Encrypting: /tmp/$$.txt\n");
 system("fe -k aaa -f /tmp/$$.txt") and die;
 print("File /tmp/$$.txt: encrypted\n");
 
 # Read back
-printf("=== Decrypting and reading back: /tmp/$$.txt\n");
+printf("=== 3. Decrypting and reading back: /tmp/$$.txt\n");
 my $line = decrypt_and_cat("/tmp/$$.txt", "aaa");
-die("Bad decryption: got [$line]\n") if ($line ne "Hello World!");
+die("ERROR: Bad decryption: got [$line]\n") if ($line ne "Hello World!");
 print("Readback: succeeded\n");
 
 # Read back using wrong key
-my $line = decrypt_and_cat("/tmp/$$.txt", "bbb");
-die("Decryption with bad key succeeded: got [$line]\n")
+printf("=== 4. Reading back using the wrong key\n");
+$line = decrypt_and_cat("/tmp/$$.txt", "bbb");
+die("ERROR: Decryption with bad key succeeded: got [$line]\n")
   if ($line eq "Hello World!");
 print("Wrong key check: succeeded\n");
