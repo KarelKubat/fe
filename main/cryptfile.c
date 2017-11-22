@@ -4,7 +4,7 @@
 
 void cryptfile(char const *f) {
     int fd, i, j;
-    char buf[BLOCKSIZE];
+    unsigned char buf[BLOCKSIZE];
     size_t offset;
     BitSequence hashval[HASH_BYTE_SIZE];
     off_t totread = 0;

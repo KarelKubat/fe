@@ -1,7 +1,10 @@
 #include "../fe.h"
 
 /* This is used in a very simple XOR based obfuscator to prevent readable
- * strings being in shared memory. */
+ * strings being in shared memory. Feel free to set this to any string to
+ * create your own binary that's incompatible with the stock fe; or leave
+ * it alone if you want any fe with the default MAGIC to work with your
+ * transcrypted files. */
 #define MAGIC "CFMMDV"
 
 char *fe_seed_serialize(char const *buf) {
@@ -16,7 +19,7 @@ char *fe_seed_serialize(char const *buf) {
 
     /* Get a hash of our own magic */
     if ( (r = fe_Hash(HASH_BIT_SIZE, (BitSequence const *)MAGIC,
-		      sizeof(MAGIC), magichash)) )
+		      sizeof(MAGIC) * 8, magichash)) )
 	fe_error("Hash algorithm indicates error %d\n", (int)r);
 
     /* Encrypt seed using magic. */
@@ -51,7 +54,7 @@ char *fe_seed_deserialize(char const *buf) {
 
     /* Get a hash of our own magic */
     if ( (r = fe_Hash(HASH_BIT_SIZE, (BitSequence const *)MAGIC,
-		      sizeof(MAGIC), magichash)) )
+		      sizeof(MAGIC) * 8, magichash)) )
 	fe_error("Hash algorithm indicates error %d\n", (int)r);
 
     /* Decrypt seed using magic */
