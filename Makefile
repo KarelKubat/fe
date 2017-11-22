@@ -22,7 +22,8 @@
 #                      version 1.* cannot be handled by this. No more local
 #                      magic setting.
 # [KK 2017-11-15] 2.01 Targets are stored as resolved filenames.
-VER     = 2.00
+# [KK 2017-11-22] 2.02 Fixed signed/unsigned warnings and fe_Hash() calling
+VER     = 2.02
 
 # Target paths. You probably don't want to install under private dirs under
 # $HOME, it seriously messes up library preloading and you have to modify
