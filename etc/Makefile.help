@@ -3,13 +3,14 @@ Make what? Choose one of:
 
   make local     Local build, only to check that building works.
 
-  make profiling Local build supplying "-g -pg" for compilation and linkage,
-  		 useful for profiling the stand-alone binary that appears as
-		 main/fe.
-
   make install	 Local build plus installation to BINDIR and LIBDIR (check the
        		 Makefile to see the values). Make sure that you have prepared a
 		 Makefile.local, see INSTALL.txt.
+
+  make profiling Install build supplying "-g -pg" for compilation and linkage,
+  		 useful for profiling the stand-alone binary that appears as
+		 main/fe. Other binaries using fe can be profiled or debugged
+		 too.
 
   make timing    Perform a couple of timing runs (mostly for dev purposes, to
                  optimize algorithms)
