@@ -5,7 +5,7 @@ static int shmid = -1;
 
 void fectx_unset() {
     struct shmid_ds sds;
-    
+
     free(ctxenv);
     ctxenv = 0;
 
@@ -19,9 +19,9 @@ void fectx_unset() {
 
 void fectx_set(FeCtx const *ctx) {
     char *mem;
-    
+
     fectx_unset();
-    
+
     ctxenv = fectx_serialize(ctx);
     fe_msg(ctx, "Serialized context: %s\n", ctxenv);
 
@@ -43,6 +43,5 @@ void fectx_set(FeCtx const *ctx) {
     free(ctxenv);
     fe_xasprintf(&ctxenv, "%d", shmid);
     setenv("FE_CTX", ctxenv, 1);
-    
-}
 
+}
