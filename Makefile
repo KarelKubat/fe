@@ -23,7 +23,9 @@
 #                      magic setting.
 # [KK 2017-11-15] 2.01 Targets are stored as resolved filenames.
 # [KK 2017-11-22] 2.02 Fixed signed/unsigned warnings and fe_Hash() calling
-VER     = 2.02
+# [KK 2017-11-24] 2.03 Fixed dirname/basename handling for MacOSX and the
+#		       reference test
+VER     = 2.03
 
 # Target paths. You probably don't want to install under private dirs under
 # $HOME, it seriously messes up library preloading and you have to modify
@@ -59,7 +61,7 @@ local:
 	  USYS=$(USYS) OPTFLAG="$(OPTFLAG)" make -C main
 
 profiling:
-	OPTFLAG=-pg make local
+	OPTFLAG=-pg make install
 	@echo
 	@echo "Remember to recompile and reinstall without profiling once"
 	@echo "you are ready!"
