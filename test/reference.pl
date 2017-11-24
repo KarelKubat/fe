@@ -50,6 +50,10 @@ if (<$if> !~ /Darwin/) {
     run("fe -t /tmp/$$ -k lorem cp reference/lorem.txt /tmp/$$");
     print("Comparing /tmp/$$ with pre-existing reference/lorem-$ver.txt\n");
     run("diff /tmp/$$ reference/lorem-$ver.txt");
+} else {
+    # We can't rely on loaded libs with Darwin's SIP.
+    # Let's use /tmp/$$-envkey from the step above.
+    rename("/tmp/$$-envkey", "/tmp/$$") or die;
 }
 
 # Check that decryption works

@@ -21,5 +21,5 @@ foo: $(T)
 	      $(shell ../etc/c-conf -c ../c-conf.cache lib dl)
 
 clean:
-	rm -f $(T)
+	rm -rf $(T) *.t.dSYM
 
