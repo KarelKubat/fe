@@ -26,7 +26,8 @@
 # [KK 2017-11-24] 2.03 Fixed dirname/basename handling for MacOSX and the
 #		       reference test
 # [KK 2018-09-26] 2.04 Cosmetic fix on progress bar during fe -f
-VER     = 2.04
+# [KK 2018-12-12] 2.05 Added openat() support
+VER     = 2.05
 
 # Target paths. You probably don't want to install under private dirs under
 # $HOME, it seriously messes up library preloading and you have to modify
