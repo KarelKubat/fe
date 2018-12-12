@@ -29,14 +29,14 @@ EOF
 print("\n1 Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver ",
       "using immediate file transcription and a commandline key\n");
 run("cp reference/lorem.txt /tmp/$$-clikey");
-run("fe -vsk lorem -f /tmp/$$-clikey");
+run("fe -k lorem -f /tmp/$$-clikey");
 run("diff /tmp/$$-clikey reference/lorem-$ver.txt");
 
 print("\n2 Transcrypting reference/lorem.txt into /tmp/$$ for fe version $ver ",
       "using immediate file transcription and an environment key\n");
 $ENV{FE_KEY} = 'lorem';
 run("cp reference/lorem.txt /tmp/$$-envkey");
-run("FE_KEY=lorem fe -vsf /tmp/$$-envkey");
+run("FE_KEY=lorem fe -f /tmp/$$-envkey");
 run("diff /tmp/$$-envkey reference/lorem-$ver.txt");
 
 # Get the uname of this system. The following will not work on Darwin because
@@ -47,14 +47,18 @@ if (<$if> !~ /Darwin/) {
     run("rm -f /tmp/$$*");
     print("\n3 Transcrypting reference/lorem.txt into /tmp/$$ for fe version ",
           "$ver using external command cp\n");
-    run("fe -vst /tmp/$$ -k lorem cp reference/lorem.txt /tmp/$$");
+    run("fe -t /tmp/$$ -k lorem cp reference/lorem.txt /tmp/$$");
     print("Comparing /tmp/$$ with pre-existing reference/lorem-$ver.txt\n");
     run("diff /tmp/$$ reference/lorem-$ver.txt");
+} else {
+    # We can't rely on loaded libs with Darwin's SIP.
+    # Let's use /tmp/$$-envkey from the step above.
+    rename("/tmp/$$-envkey", "/tmp/$$") or die;
 }
 
 # Check that decryption works
 print("\n4 Decrypting /tmp/$$ using an environment key\n");
-run("fe -vsf /tmp/$$");
+run("fe -f /tmp/$$");
 print("Comparing plaintext /tmp/$$ with reference/lorem.txt\n");
 run("diff /tmp/$$ reference/lorem.txt");
 

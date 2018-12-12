@@ -75,7 +75,7 @@ typedef struct {
 
 /* Shared lib functions */
 extern void fe_close_fd(int fd);
-extern void fe_cryptbuf(char *buf, size_t bufsz, size_t offset,
+extern void fe_cryptbuf(unsigned char *buf, size_t bufsz, size_t offset,
 			BitSequence *hashval);
 extern void *fe_dllookup(char const *name);
 extern void fe_error(char const *fmt, ...)
@@ -84,6 +84,7 @@ extern int fe_is_fd_target(int fd);
 extern int fe_isfile(struct stat const *st);
 extern void fe_msg(FeCtx const *ctx, char const *fmt, ...)
     __attribute__((format(printf, 2, 3)));
+extern char *fe_printable_bytes(unsigned char const *buf, size_t buflen);
 extern char fe_randbyte(FeCtx *ctx, uint32_t x, BitSequence *hashval);
 extern char *fe_seed_deserialize(char const *buf);
 extern char *fe_seed_serialize(char const *buf);

@@ -1,9 +1,12 @@
 #include "../fe.h"
 
 char *fe_xbasename(char const *path) {
-    char *cp;
+  /* Strdup the path, basename chops it up. The caller must free the return
+   * value. */
+    char *copy = fe_xstrdup(path);
+    char *base = basename(copy);
+    char *ret  = fe_xstrdup(base);
 
-    if ( (cp = strchr(path, '/')) )
-	return fe_xstrdup(cp + 1);
-    return fe_xstrdup(path);
+    free(copy);
+    return ret;
 }

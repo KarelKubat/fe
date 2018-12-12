@@ -4,60 +4,54 @@
  * /where/ever/file.txt -> /where/ever/.#file.txt
  */
 static char *emacsbuf(char *t) {
-    char *ret = 0;
-    char *dn = fe_xdirname(t);
-    
-    if (strcmp(dn, ".")) {
-	dn = fe_xstrcat(dn, "/");
-	ret = dn;
-    } else
-	free(dn);
-    
-    ret = fe_xstrcat(ret, ".#");
-    ret = fe_xstrcat(ret, fe_xbasename(t));
-    return ret;
+    char *dirpart  = fe_xdirname(t);
+    char *basepart = fe_xbasename(t);
+
+    dirpart = fe_xstrcat(dirpart, "/.#");
+    dirpart = fe_xstrcat(dirpart, basepart);
+
+    return dirpart;
 }
 
 /* Returns a vi tmp buffer for a given file,
  * /where/ever/file.txt -> /where/ever/.file.txt.swp
  */
 static char *vibuf(char *t) {
-    char *ret = 0;
-    char *dn = fe_xdirname(t);
-    
-    if (strcmp(dn, ".")) {
-	dn = fe_xstrcat(ret, "/");
-	ret = dn;
-    } else
-	free(dn);
-    
-    ret = fe_xstrcat(ret, ".");
-    ret = fe_xstrcat(ret, fe_xbasename(t));
-    ret = fe_xstrcat(ret, ".swp");
-    return ret;
+    char *dirpart  = fe_xdirname(t);
+    char *basepart = fe_xbasename(t);
+
+    dirpart = fe_xstrcat(dirpart, "/.");
+    dirpart = fe_xstrcat(dirpart, basepart);
+    dirpart = fe_xstrcat(dirpart, ".swp");
+
+    return dirpart;
 }
 
 void fe_target_add(FeCtx *ctx, char const *t) {
     struct stat statbuf;
-    char *fname;
+    char *real_fname;
     int statres;
 
     statres = stat(t, &statbuf);
 
-    /* Only consider true files: stat must work, and must be a true file */
+    /* If the stat works, then only consider the file if it's a true file.
+     * If stat doesn't work, then consider it - it may appear later.
+     * In any case, use the real path to the file.
+     */
     if ( (!statres && fe_isfile(&statbuf)) ||
 	 (statres) ) {
 	ctx->targets = fe_xrealloc(ctx->targets,
-				(ctx->ntargets + 3) * sizeof(Target));
+                                   (ctx->ntargets + 3) * sizeof(Target));
 
-	fname = fe_xstrdup(t);
-	ctx->targets[ctx->ntargets].name = fname;
+        real_fname = fe_xrealpath(t);
+
+	ctx->targets[ctx->ntargets].name = real_fname;
 	ctx->targets[ctx->ntargets].fd = -1;
 
-	ctx->targets[ctx->ntargets + 1].name = emacsbuf(fname);
+	ctx->targets[ctx->ntargets + 1].name = emacsbuf(real_fname);
 	ctx->targets[ctx->ntargets + 1].fd = -1;
-	
-	ctx->targets[ctx->ntargets + 2].name = vibuf(fname);
+
+	ctx->targets[ctx->ntargets + 2].name = vibuf(real_fname);
 	ctx->targets[ctx->ntargets + 2].fd = -1;
 
 	ctx->ntargets += 3;

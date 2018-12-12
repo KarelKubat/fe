@@ -24,8 +24,8 @@ int fe_is_fd_target(int fd) {
 	    return 1;
 	}
 
-#if 0    
+#if 0
     fe_msg(fectx(), "Fd %d: not in target table\n", fd);
-#endif    
+#endif
     return 0;
 }

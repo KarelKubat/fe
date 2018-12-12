@@ -1,16 +1,25 @@
 #include "../fe.h"
 
+/* Read/write size */
 #define BLOCKSIZE 102400
+
+/* Max dots on progress bar */
+#define MAXDOTS 50
+
+/* Max length of progress bar. We make no attempt to determine the actual
+ * window size. */
+#define LINELEN 78
 
 void cryptfile(char const *f) {
     int fd, i, j;
-    char buf[BLOCKSIZE];
+    unsigned char buf[BLOCKSIZE];
     size_t offset;
     BitSequence hashval[HASH_BYTE_SIZE];
     off_t totread = 0;
     struct stat statbuf;
     time_t start_time = time(0), complete_time = 0,
 	   elapsed_time = 1, last_elapsed = 0;
+    char *secdisp;
 
     /* Open or croak */
     if (stat(f, &statbuf))
@@ -47,25 +56,21 @@ void cryptfile(char const *f) {
 	    /* Update display only if we have a sec or more difference. */
 	    if (last_elapsed < elapsed_time) {
 		last_elapsed = elapsed_time;
-
-/* For debugging the progress bar, set this to 1: */
-#if 0
-		{
-		    int ndots = (int) (60 * totread / statbuf.st_size);
-		    printf("read %ld of total %ld, dots=%d, "
-			   "complete_time=%ld, elapsed_time=%ld\n",
-			   (long)totread, (long)statbuf.st_size, ndots,
-			   (long)complete_time, (long)elapsed_time);
-		}
-#endif
-
 		printf("\r[");
-		for (i = 0; i < (60 * (double)totread / statbuf.st_size); i++)
+		for (i = 0;
+                     i < (MAXDOTS * (double)totread / statbuf.st_size);
+                     ++i)
 		    putchar('.');
-		for (j = i; j < 60; j++)
+		for (j = i; j < MAXDOTS; j++)
 		    putchar(' ');
-		printf("%5lu sec left]",
-		       (long unsigned) complete_time - elapsed_time);
+                fe_xasprintf(&secdisp, " %lus (%lus left)]",
+                             (long unsigned) elapsed_time,
+                             (long unsigned) complete_time - elapsed_time);
+                printf("%s", secdisp);
+                /* Add 2 for leading and trailing [] */
+                for (i = 2 + MAXDOTS + (int)strlen(secdisp); i < LINELEN; ++i)
+                  putchar(' ');
+                free(secdisp);
 		fflush(stdout);
 	    }
 	}
@@ -92,10 +97,7 @@ void cryptfile(char const *f) {
 		  f, (int)nwritten, (int)nread);
 	}
     }
-    printf("\r[");
-    for (i = 0; i < 60; i++)
-	putchar('.');
-    printf("          done]\n");
+    printf("\n");
 
     if (close(fd) < 0)
 	fe_error("Close error on file %s: %s\n", f, strerror(errno));
