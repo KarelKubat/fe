@@ -33,7 +33,7 @@ int main(int argc, char **argv, char **envp) {
     usage();
 
   /* Parse command line */
-  while ( (opt = getopt_long(argc, argv, "h?a:k:f:t:vsiVEed",
+  while ( (opt = getopt_long(argc, argv, "h?a:k:f:t:vsiVEedb",
 			     longopts, 0)) > -1 )
     switch (opt) {
     case 'h':
@@ -173,6 +173,7 @@ int main(int argc, char **argv, char **envp) {
   if (beep && isatty(1))
     for (i = 0; i < 5; ++i) {
       putchar('\a');
+      fflush(stdout);
       sleep(1);
     }
 
