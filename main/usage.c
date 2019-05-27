@@ -36,6 +36,7 @@ void usage(void) {
 " --algorithm NR    selects algorithm NR for in-place transcrypting a file\n"
 "                   Allowed algorithms are 1 up to the first digit of the\n"
 "                   version\n"
+" --beep, -b        Beep upon exit (useful for long running transcryptions)\n"
 "\n"
 "When CMD ARGS is given, then it is invoked with fe as a layer underneath\n"
 "to transcrypt file(s) that the command opens. Use --target FILE to limit\n"
