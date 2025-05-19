@@ -90,6 +90,7 @@ clean:
 	rm -f c-conf.cache
 
 dist: clean
+	-mdtoc -i README.md
 	(cd ..; \
          tar -c -z --exclude fe/Makefile.local \
 	     --exclude fe/.git --exclude fe/.gitignore -f $(TAR) fe/)
